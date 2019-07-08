@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 
-class Poll extends Model
+class Campaign extends Model
 {
     use CrudTrait;
 
@@ -15,14 +15,14 @@ class Poll extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'polls';
+    protected $table = 'campaigns';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['name','start_date','end_date','state'];
+    protected $fillable = ['name'];
     // protected $hidden = [];
     // protected $dates = [];
- 
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -34,11 +34,6 @@ class Poll extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function campaign()
-    {
-        return $this->belongsTo('App\Models\Campaign');
-    }
-
 
     /*
     |--------------------------------------------------------------------------
