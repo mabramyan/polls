@@ -26,7 +26,8 @@ class AnswerCrudController extends CrudController
         $this->crud->setModel('App\Models\Answer');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/answer');
         $this->crud->setEntityNameStrings('answer', 'answers');
-
+        $this->crud->allowAccess('reorder');
+        $this->crud->enableReorder('name', 1);
         /*
         |--------------------------------------------------------------------------
         | CrudPanel Configuration
@@ -157,4 +158,25 @@ class AnswerCrudController extends CrudController
         // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
     }
+
+    public function reorder()
+    {
+        // $options['name'] = 'question_id';
+        // $this->crud->addFilter($options,2);
+        $queryId = request('question_id');
+      if(!empty($queryId))
+      {
+          $this->crud->addClause('where', 'question_id', $queryId);
+      }
+        
+        return parent::reorder();
+        
+    }
+   
+
+    public function getEntries(){
+
+        return parent::getEntries();
+    }
+
 }

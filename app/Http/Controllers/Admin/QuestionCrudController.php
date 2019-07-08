@@ -27,6 +27,8 @@ class QuestionCrudController extends CrudController
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/question');
         $this->crud->setEntityNameStrings('question', 'questions');
 
+        $this->crud->allowAccess('reorder');
+        $this->crud->enableReorder('name', 1);
         /*
         |--------------------------------------------------------------------------
         | CrudPanel Configuration
