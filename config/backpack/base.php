@@ -149,5 +149,5 @@ return [
     |
     */
 
-    'license_code' => env('BACKPACK_LICENSE', false),
+    'license_code' => 'some_license',//env('BACKPACK_LICENSE', false),
 ];
