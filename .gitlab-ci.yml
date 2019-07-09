@@ -1,0 +1,23 @@
+stages:
+  - build
+ # - test
+  - deploy
+  
+  
+composer:  
+  stage: build
+  script:
+    - composer install --prefer-dist --no-ansi --no-interaction --no-progress
+  
+
+deploy_to_production:
+  stage: deploy
+  only:
+    - master
+  environment:
+    name: production
+    url: https://poll.fortunejack.com
+  script:
+    - cd  ${CI_PROJECT_DIR}
+    - rsync -ar  . 127.0.0.1::poll.fortunejack.com
+
