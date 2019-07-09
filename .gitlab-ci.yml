@@ -7,6 +7,7 @@ stages:
 composer:  
   stage: build
   script:
+    - cd  ${CI_PROJECT_DIR}
     - composer install --prefer-dist --no-ansi --no-interaction --no-progress
   
 
@@ -19,5 +20,6 @@ deploy_to_production:
     url: https://poll.fortunejack.com
   script:
     - cd  ${CI_PROJECT_DIR}
-    - rsync -ar  . 127.0.0.1::poll.fortunejack.com
+    - echo "$PROD_ENV" > .env
+    - rsync -ar  . 127.0.0.1::poll.fortunejack.com --delete
 
