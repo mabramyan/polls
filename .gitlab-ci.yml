@@ -1,5 +1,6 @@
 stages:
   - build
+  - migrate
  # - test
   - deploy
   
@@ -8,7 +9,11 @@ composer:
   stage: build
   script:
     - composer install --prefer-dist --no-ansi --no-interaction --no-progress
-  
+    
+migrations:
+    stage: migrate
+    script: 
+        - php artisan migrate
 
 deploy_to_production:
   stage: deploy
