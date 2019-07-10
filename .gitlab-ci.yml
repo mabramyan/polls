@@ -1,20 +1,6 @@
 stages:
-  - build
-  - migrate
- # - test
   - deploy
   
-  
-composer:  
-  stage: build
-  script:
-    - composer install --prefer-dist --no-ansi --no-interaction --no-progress
-    
-migrations:
-    stage: migrate
-    script: 
-        - php artisan migrate
-
 deploy_to_production:
   stage: deploy
   only:
@@ -24,5 +10,9 @@ deploy_to_production:
     url: https://poll.fortunejack.com
   script:
     - cd  ${CI_PROJECT_DIR}
-    - rsync -ar  . 127.0.0.1::poll.fortunejack.com
-
+    - echo "$PROD_ENV" > .env
+    - composer install --prefer-dist --no-ansi --no-interaction --no-progress
+    - composer require predis/predis
+    - "rsync -ar --exclude-from='.rsync_excludes' --delete-before --delete-excluded . 127.0.0.1::poll.fortunejack.com"
+    - php artisan migrate --force
+    - php artisan db:seed --class=UsersTableSeeder --force
