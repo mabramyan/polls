@@ -17,7 +17,7 @@ class PollController extends Controller
 
             return new PollResource($this->getActivePoll()) ;
         }
-        return Poll::where('id', $pollId)->first();
+        return new PollResource(Poll::where('id', $id)->first());
     }
 
     public function getActivePoll()
