@@ -38,6 +38,10 @@ class Question extends Model
     {
         return $this->belongsTo('App\Models\Poll');
     }
+    public function answers()
+    {
+        return $this->hasMany('App\Models\Answer');
+    }
 
     /*
     |--------------------------------------------------------------------------

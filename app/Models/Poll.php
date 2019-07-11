@@ -19,10 +19,10 @@ class Poll extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['name','start_date','end_date','state'];
+    protected $fillable = ['name', 'start_date', 'end_date', 'state'];
     // protected $hidden = [];
     // protected $dates = [];
- 
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -38,7 +38,10 @@ class Poll extends Model
     {
         return $this->belongsTo('App\Models\Campaign');
     }
-
+    public function questions()
+    {
+        return $this->hasMany('App\Models\Question');
+    }
 
     /*
     |--------------------------------------------------------------------------
