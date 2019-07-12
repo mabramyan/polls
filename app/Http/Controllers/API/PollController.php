@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Poll as Poll;
 use App\Http\Resources\Poll as PollResource; 
-
+use App\Exceptions\ApiException;
 class PollController extends Controller
 {
     //
@@ -17,7 +17,14 @@ class PollController extends Controller
 
             return new PollResource($this->getActivePoll()) ;
         }
-        return new PollResource(Poll::where('id', $id)->first());
+
+        $fined = Poll::where('id', $id)->first();
+        if(empty($fined))
+        {
+            throw new ApiException("", 1);
+        }
+
+        return new PollResource($fined);
     }
 
     public function getActivePoll()
