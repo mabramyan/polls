@@ -24,6 +24,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('poll', 'API\PollController@getPoll');
     Route::get('poll/{id?}', 'API\PollController@getPoll');
     Route::post('vote', 'API\UserController@vote');
+    Route::put('vote', 'API\UserController@voteUpdate');
 
    // Route::get('poll', 'API\PollController@getPoll');
 });

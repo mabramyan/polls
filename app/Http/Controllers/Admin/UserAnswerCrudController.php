@@ -8,6 +8,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\UserAnswerRequest as StoreRequest;
 use App\Http\Requests\UserAnswerRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
+use Symfony\Component\Console\Input\Input;
 
 /**
  * Class UserAnswerCrudController
@@ -31,6 +32,12 @@ class UserAnswerCrudController extends CrudController
         $this->crud->denyAccess('delete');
         $this->crud->denyAccess('update');
         $this->crud->removeAllButtonsFromStack('line');
+
+        $t = request()->input('state');
+        if (!isset($t)) {
+            $this->crud->addClause('where', 'state', 1);
+        }
+
 
         /*
         |--------------------------------------------------------------------------
@@ -103,8 +110,8 @@ class UserAnswerCrudController extends CrudController
 
         $this->crud->addColumn(
             [
-                'name' => "created_at", 
-                'label' => "Created", 
+                'name' => "created_at",
+                'label' => "Created",
                 'type' => "date",
             ]
         );
@@ -178,6 +185,22 @@ class UserAnswerCrudController extends CrudController
                 $this->crud->addClause('where', 'created_at', '<=', $dates->to . ' 23:59:59');
             }
         );
+        $this->crud->addFilter([ // select2 filter
+            'name' => 'state',
+            'type' => 'select2',
+            'label' => 'Status'
+        ], function () {
+            return [
+
+                0 => 'All',
+                1 => 'Active',
+
+            ];
+        }, function ($value) { // if the filter is active
+            if ($value > 0) {
+                $this->crud->addClause('where', 'state', ($value));
+            }
+        });
 
 
 

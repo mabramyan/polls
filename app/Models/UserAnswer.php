@@ -34,11 +34,14 @@ class UserAnswer extends Model
 
     public static function vote($userId, $answerId)
     {
-        if (!self::canAdd($userId, $answerId)) {
+        $answer = AnswerModel::where('id', $answerId)->first();
+
+
+
+        if (!self::canAdd($userId, $answer->question->id)) {
             throw new ApiException('Already has answer', 5);
         }
 
-        $answer = AnswerModel::where('id', $answerId)->first();
         $question = $answer->question;
         $poll = $question->poll;
         $campaign = $poll->campaign;
@@ -53,15 +56,47 @@ class UserAnswer extends Model
 
         return $tmp->save();
     }
-    public static function canAdd($userId, $answerId)
+
+
+    public static function canAdd($userId, $questionId)
     {
-        if (UserAnswer::where([['user_id', $userId], ['answer_id', $answerId]])->first()) {
+        if (UserAnswer::where([['user_id', $userId], ['question_id', $questionId]])->first()) {
             return false;
         }
 
         return true;
     }
 
+
+
+    public static function voteUpdate($userId, $answerId)
+    {
+        $answer = AnswerModel::where('id', $answerId)->first();
+
+        if (!self::canUpdate($userId, $answer->question->id)) {
+            throw new ApiException('Already has answer', 5);
+        }
+        UserAnswer::where([['user_id', $userId], ['question_id', $answer->question->id]])->update(['state' => '0']);
+        $question = $answer->question;
+        $poll = $question->poll;
+        $campaign = $poll->campaign;
+
+
+        $tmp = new UserAnswer();
+        $tmp->user_id = $userId;
+        $tmp->answer_id = $answer->id;
+        $tmp->question_id = $question->id;
+        $tmp->poll_id = $poll->id;
+        $tmp->campaign_id = $campaign->id;
+
+        return $tmp->save();
+    }
+
+
+    public static function canUpdate()
+    {
+        return true;
+    }
 
 
 
