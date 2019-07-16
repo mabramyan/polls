@@ -15,4 +15,5 @@ Route::group([
     CRUD::resource('question', 'QuestionCrudController');
     CRUD::resource('answer', 'AnswerCrudController');
     CRUD::resource('campaign', 'CampaignCrudController');
+    CRUD::resource('user_answer', 'UserAnswerCrudController');
 }); // this should be the absolute last line of this file

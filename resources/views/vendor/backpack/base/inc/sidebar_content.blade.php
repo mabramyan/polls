@@ -6,3 +6,4 @@
 <li><a href='{{ backpack_url('question') }}'><i class='fa fa-tag'></i> <span>Questions</span></a></li>
 <li><a href='{{ backpack_url('answer') }}'><i class='fa fa-tag'></i> <span>Answers</span></a></li>
 <li><a href='{{ url(config('backpack.base.route_prefix', 'admin') . '/setting') }}'><i class='fa fa-cog'></i> <span>Settings</span></a></li>
+<li><a href='{{ backpack_url('user_answer') }}'><i class='fa fa-tag'></i> <span>Users Answer</span></a></li>

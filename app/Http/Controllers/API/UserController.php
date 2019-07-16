@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use App\Exceptions\ApiException;
+use App\Models\Answer;
+use App\Models\UserAnswer;
+use App\Http\Resources\Answer as AppAnswer;
 
 class UserController extends Controller
 {
@@ -26,29 +30,7 @@ class UserController extends Controller
             return response()->json(['error' => 'Unauthorised'], 401);
         }
     }
-    /** 
-     * Register api 
-     * 
-     * @return \Illuminate\Http\Response 
-     */
-    public function register(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
-        }
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
-        $success['token'] =  $user->createToken('MyApp')->accessToken;
-        $success['name'] =  $user->name;
-        return response()->json(['success' => $success], $this->successStatus);
-    }
+
     /** 
      * details api 
      * 
@@ -58,5 +40,27 @@ class UserController extends Controller
     {
         $user = Auth::user();
         return response()->json(['success' => $user], $this->successStatus);
+    }
+
+    public function vote(Request $request)
+    {
+        $userId = (int) $request->input('user_id', 0);
+        $answerId = (int) $request->input('answer_id', 0);
+        if (empty($userId)) {
+            throw new ApiException('Incorrect user_id', 2);
+        }
+        if (empty($answerId)) {
+            throw new ApiException('Incorrect answer_id', 3);
+        }
+        $answer =  Answer::where([['id', $answerId], ['state', 1]])->first();
+
+        if (empty($answer)) {
+            throw new ApiException('Answer not found', 4);
+        }
+        if(UserAnswer::vote($userId, $answerId))
+        {
+           return response()->json(['success' => true], $this->successStatus);
+        }
+        throw new ApiException('Unknown error', 100);
     }
 }

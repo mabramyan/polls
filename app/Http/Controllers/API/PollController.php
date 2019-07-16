@@ -12,9 +12,7 @@ class PollController extends Controller
     //
     public function getPoll(Request $request, $id = null)
     {
-       // $pollId = $request->get('id');
         if (empty($id)) {
-
             return new PollResource($this->getActivePoll()) ;
         }
 
