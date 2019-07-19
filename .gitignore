@@ -5,6 +5,7 @@
 /vendor
 /.history
 /.vscode
+/.directory
 /.vscode/**.*
 .env
 .phpunit.result.cache
