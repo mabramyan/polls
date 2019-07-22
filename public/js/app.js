@@ -1717,31 +1717,98 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       userId: null,
       loading: true,
       errored: false,
+      answers: false,
       selected: "",
+      seletedCampaign: false,
       campaigns: []
     };
   },
   methods: {
     search: function search() {
+      var _this = this;
+
       console.log("search");
+      axios.get("/admin/get_user_answers/" + this.selected + "/" + this.userId).then(function (response) {
+        if (response.data.success && response.data.success.length) {
+          _this.answers = response.data.success;
+
+          _this.findSeletedCampaign();
+        } else {
+          _this.answers = false;
+        }
+
+        console.log(_this.answers);
+      })["catch"](function (error) {
+        console.log(error);
+        _this.errored = true;
+      })["finally"](function () {
+        return _this.loading = false;
+      });
+    },
+    findSeletedCampaign: function findSeletedCampaign() {
+      return this.campaigns.reduce(function (a, b) {
+        return b.id == this.selected ? b : {};
+      });
+    },
+    hasPredictionInPoll: function hasPredictionInPoll(pollId) {
+      console.log(pollId);
+      return this.answers.reduce(function (a, b) {
+        console.log(a);
+        console.log(b);
+        return pollId == b.poll_id ? a + 1 : a;
+      }, 0);
     }
   },
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
 
     axios.post("/admin/get_campaigns").then(function (response) {
-      _this.campaigns = response.data.data;
+      _this2.campaigns = response.data.data;
     })["catch"](function (error) {
       console.log(error);
-      _this.errored = true;
+      _this2.errored = true;
     })["finally"](function () {
-      return _this.loading = false;
+      return _this2.loading = false;
     });
   }
 });
@@ -37116,7 +37183,103 @@ var render = function() {
             }
           })
         ])
-      ])
+      ]),
+      _vm._v(" "),
+      _vm.answers
+        ? _c("div", { staticClass: "col-md-12" }, [
+            _c("div", { staticClass: "container-fluid" }, [
+              _c(
+                "ul",
+                { staticClass: "list-group" },
+                [
+                  _c("li", { staticClass: "list-group-item active" }, [
+                    _vm._v(_vm._s(_vm.findSeletedCampaign().name))
+                  ]),
+                  _vm._v(" "),
+                  _vm._l(_vm.findSeletedCampaign().polls, function(poll) {
+                    return _c(
+                      "li",
+                      {
+                        key: poll.id,
+                        staticClass: "list-group-item list-group-item-info"
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "list-group-item list-group-item-info",
+                            attrs: { href: "#" }
+                          },
+                          [
+                            _c("strong", [_vm._v(_vm._s(poll.name))]),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "pull-right" }, [
+                              _c("strong", [
+                                _vm._v(
+                                  "User prediction: " +
+                                    _vm._s(
+                                      _vm.hasPredictionInPoll(poll.id)
+                                        ? _vm.hasPredictionInPoll(poll.id)
+                                        : "No prediction"
+                                    )
+                                )
+                              ])
+                            ])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "ul",
+                          { staticClass: "list-group" },
+                          _vm._l(poll.questions, function(question) {
+                            return _c(
+                              "li",
+                              {
+                                key: question.id,
+                                staticClass:
+                                  "list-group-item list-group-item-success"
+                              },
+                              [
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass:
+                                      "list-group-item list-group-item-success",
+                                    attrs: { href: "#" }
+                                  },
+                                  [_vm._v(_vm._s(question.name))]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "ul",
+                                  { staticClass: "list-group" },
+                                  _vm._l(question.answers, function(answer) {
+                                    return _c(
+                                      "li",
+                                      {
+                                        key: answer.id,
+                                        staticClass:
+                                          "list-group-item list-group-item-warning"
+                                      },
+                                      [_vm._v(_vm._s(answer.name))]
+                                    )
+                                  }),
+                                  0
+                                )
+                              ]
+                            )
+                          }),
+                          0
+                        )
+                      ]
+                    )
+                  })
+                ],
+                2
+              )
+            ])
+          ])
+        : _vm._e()
     ])
   ])
 }
