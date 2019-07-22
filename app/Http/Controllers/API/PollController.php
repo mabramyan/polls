@@ -29,4 +29,7 @@ class PollController extends Controller
     {
         return Poll::first();
     }
+
+    
+
 }

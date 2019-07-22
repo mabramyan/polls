@@ -34,6 +34,11 @@ class Campaign extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function polls()
+    {
+        return $this->hasMany('App\Models\Poll');
+    }
+
 
     /*
     |--------------------------------------------------------------------------
