@@ -19,7 +19,7 @@ class Poll extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['name', 'start_date', 'end_date', 'state'];
+    protected $fillable = ['name', 'start_date', 'end_date', 'state','campaign_id'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -60,4 +60,14 @@ class Poll extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
+    public function setStartDateAttribute($value)
+    {
+
+        $this->attributes['start_date'] =empty($value) ? date('Y-m-d H:i:s') : $value;
+    }
+    public function setEndDateAttribute($value)
+    {
+        $this->attributes['end_date'] =empty($value) ? date('Y-m-d H:i:s') : $value;
+    }
 }

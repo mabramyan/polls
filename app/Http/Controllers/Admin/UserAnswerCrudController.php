@@ -8,7 +8,9 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\UserAnswerRequest as StoreRequest;
 use App\Http\Requests\UserAnswerRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
+use App\Models\UserAnswer;
 use Symfony\Component\Console\Input\Input;
+use App\Http\Resources\UserAnswer as UserAnswerResource;
 
 /**
  * Class UserAnswerCrudController
@@ -226,4 +228,16 @@ class UserAnswerCrudController extends CrudController
         // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
     }
+
+
+    public function getUserAnsers($campaignId,$id)
+    {
+     
+        return response()->json(['success' => UserAnswerResource::collection(UserAnswer::where([['user_id',$id],['campaign_id',$campaignId]])->get())], 200);
+        
+
+
+      
+    }
+
 }

@@ -12,6 +12,7 @@ Route::group([
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
     Route::post('/get_campaigns',  'CampaignCrudController@getCampaings');
+    Route::get('/get_user_answers/{campaignId}/{id}',  'UserAnswerCrudController@getUserAnsers');
     
     CRUD::resource('poll', 'PollCrudController');
     CRUD::resource('question', 'QuestionCrudController');

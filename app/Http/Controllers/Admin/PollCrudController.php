@@ -61,23 +61,24 @@ class PollCrudController extends CrudController
                 'entity' => 'campaign', // the method that defines the relationship in your Model
                 'attribute' => "name", // foreign key attribute that is shown to user
                 'model' => "App\Models\Campaign", // foreign key model
-            ]);
-            $this->crud->addColumn(
-                [
-                    'name' => 'start_date',
-                    'label' => 'Start Date',
-                    'type' => 'datetime',
-
-                ]
-            );
-        $this->crud->addColumn(
-            [
-                'name' => 'end_date',
-                'label' => 'End Date',
-                'type' => 'datetime',
-
             ]
         );
+        // $this->crud->addColumn(
+        //     [
+        //         'name' => 'start_date',
+        //         'label' => 'Start Date',
+        //         'type' => 'datetime',
+
+        //     ]
+        // );
+        // $this->crud->addColumn(
+        //     [
+        //         'name' => 'end_date',
+        //         'label' => 'End Date',
+        //         'type' => 'datetime',
+
+        //     ]
+        // );
 
         $this->crud->addColumn(
             [
@@ -95,30 +96,30 @@ class PollCrudController extends CrudController
             'label' => 'Name', // the input label
             'type' => 'text',
         ]);
-        $this->crud->addField([// Select2
+        $this->crud->addField([ // Select2
             'label' => "Campaign",
             'type' => 'select2',
             'name' => 'campaign_id', // the db column for the foreign key
             'entity' => 'campaign', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
             'model' => "App\Models\Campaign", // foreign key model
-                // optional
-//            'options' => (function ($query)
-//                    {
-//                        return $query->orderBy('name', 'ASC')->where('depth', 1)->get();
-//                    }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+            // optional
+            //            'options' => (function ($query)
+            //                    {
+            //                        return $query->orderBy('name', 'ASC')->where('depth', 1)->get();
+            //                    }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
         ]);
 
-        $this->crud->addField([
-            'name' => 'start_date', // the name of the db column
-            'label' => 'Start Date', // the input label
-            'type' => 'datetime_picker',
-        ]);
-        $this->crud->addField([
-            'name' => 'end_date', // the name of the db column
-            'label' => 'End Date', // the input label
-            'type' => 'datetime_picker',
-        ]);
+        // $this->crud->addField([
+        //     'name' => 'start_date', // the name of the db column
+        //     'label' => 'Start Date', // the input label
+        //     'type' => 'datetime_picker',
+        // ]);
+        // $this->crud->addField([
+        //     'name' => 'end_date', // the name of the db column
+        //     'label' => 'End Date', // the input label
+        //     'type' => 'datetime_picker',
+        // ]);
 
         $this->crud->addField([
             'name' => 'state', // the name of the db column
@@ -131,13 +132,13 @@ class PollCrudController extends CrudController
             ],
         ]);
 
-        $this->crud->addFilter([// select2 filter
+        $this->crud->addFilter([ // select2 filter
             'name' => 'campaign_id',
             'type' => 'select2',
             'label' => 'Campaign'
-                ], function() {
+        ], function () {
             return \App\Models\Campaign::all()->pluck('name', 'id')->toArray();
-        }, function($value) { // if the filter is active
+        }, function ($value) { // if the filter is active
             $this->crud->addClause('where', 'campaign_id', $value);
         });
 
