@@ -22,13 +22,25 @@
         <div class="container-fluid">
           <ul class="list-group">
             <li class="list-group-item active">{{findSeletedCampaign().name}}</li>
-            <li class="list-group-item list-group-item-info" :key="poll.id" v-for="poll in findSeletedCampaign().polls">
-              <a href="#" class="list-group-item list-group-item-info">{{poll.name}}</a>
+            <li
+              class="list-group-item list-group-item-info"
+              :key="poll.id"
+              v-for="poll in findSeletedCampaign().polls"
+            >
+              <div href="#" class="list-group-item list-group-item-info"><strong>{{poll.name}}</strong> <span class="pull-right"><strong>User prediction: {{hasPredictionInPoll(poll.id)?hasPredictionInPoll(poll.id):'No prediction'}}</strong></span></div>
               <ul class="list-group">
-                <li class="list-group-item list-group-item-success" v-for="question in poll.questions" :key="question.id">
+                <li
+                  class="list-group-item list-group-item-success"
+                  v-for="question in poll.questions"
+                  :key="question.id"
+                >
                   <a href="#" class="list-group-item list-group-item-success">{{question.name}}</a>
                   <ul class="list-group">
-                    <li class="list-group-item  list-group-item-warning" v-for="answer in question.answers" :key="answer.id">{{answer.name}}</li>
+                    <li
+                      class="list-group-item list-group-item-warning"
+                      v-for="answer in question.answers"
+                      :key="answer.id"
+                    >{{answer.name}}</li>
                   </ul>
                 </li>
               </ul>
@@ -78,10 +90,16 @@ export default {
         return b.id == this.selected ? b : {};
       });
     },
-    hasPredictionInPoll(pollId){
-
+    hasPredictionInPoll(pollId) {
+ console.log(pollId)
+      
+      return this.answers.reduce(function(a, b) {
+        console.log(a)
+        console.log(b)
+        
+        return pollId == b.poll_id?a+1:a;
+      },0);
     }
-
   },
   mounted() {
     axios

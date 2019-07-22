@@ -1739,6 +1739,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1778,7 +1790,14 @@ __webpack_require__.r(__webpack_exports__);
         return b.id == this.selected ? b : {};
       });
     },
-    hasPredictionInPoll: function hasPredictionInPoll(pollId) {}
+    hasPredictionInPoll: function hasPredictionInPoll(pollId) {
+      console.log(pollId);
+      return this.answers.reduce(function (a, b) {
+        console.log(a);
+        console.log(b);
+        return pollId == b.poll_id ? a + 1 : a;
+      }, 0);
+    }
   },
   mounted: function mounted() {
     var _this2 = this;
@@ -37186,12 +37205,27 @@ var render = function() {
                       },
                       [
                         _c(
-                          "a",
+                          "div",
                           {
                             staticClass: "list-group-item list-group-item-info",
                             attrs: { href: "#" }
                           },
-                          [_vm._v(_vm._s(poll.name))]
+                          [
+                            _c("strong", [_vm._v(_vm._s(poll.name))]),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "pull-right" }, [
+                              _c("strong", [
+                                _vm._v(
+                                  "User prediction: " +
+                                    _vm._s(
+                                      _vm.hasPredictionInPoll(poll.id)
+                                        ? _vm.hasPredictionInPoll(poll.id)
+                                        : "No prediction"
+                                    )
+                                )
+                              ])
+                            ])
+                          ]
                         ),
                         _vm._v(" "),
                         _c(
@@ -37225,7 +37259,7 @@ var render = function() {
                                       {
                                         key: answer.id,
                                         staticClass:
-                                          "list-group-item  list-group-item-warning"
+                                          "list-group-item list-group-item-warning"
                                       },
                                       [_vm._v(_vm._s(answer.name))]
                                     )
