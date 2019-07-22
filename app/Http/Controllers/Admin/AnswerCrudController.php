@@ -104,7 +104,7 @@ class AnswerCrudController extends CrudController
         // ]);
 
         $this->crud->addField([ // Select2
-            'label' => "Poll",
+            'label' => "Question",
             'type' => 'select2',
             'name' => 'question_id', // the db column for the foreign key
             'entity' => 'question', // the method that defines the relationship in your Model

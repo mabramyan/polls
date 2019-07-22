@@ -9,6 +9,10 @@ class Question extends Model
 {
     use CrudTrait;
 
+    protected $defaults = array(
+        'start_date' => '',
+        'end_date' => '',
+    );
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -19,7 +23,7 @@ class Question extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['name','poll_id','start_date','end_date','state'];
+    protected $fillable = ['name', 'poll_id', 'start_date', 'end_date', 'state'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -29,6 +33,16 @@ class Question extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function __construct(array $attributes = array())
+    {
+        $this->defaults = array(
+            'start_date' => date('Y-m-d H:i:s'),
+            'end_date' => date('Y-m-d H:i:s'),
+        );
+
+        $this->setRawAttributes($this->defaults, true);
+        parent::__construct($attributes);
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -60,4 +74,13 @@ class Question extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+    public function setStartDateAttribute($value)
+    {
+
+        $this->attributes['start_date'] = empty($value) ? date('Y-m-d H:i:s') : $value;
+    }
+    public function setEndDateAttribute($value)
+    {
+        $this->attributes['end_date'] = empty($value) ? date('Y-m-d H:i:s') : $value;
+    }
 }

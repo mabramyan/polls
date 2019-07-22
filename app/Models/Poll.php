@@ -61,13 +61,14 @@ class Poll extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function setStartDateAttribute($value)
-    {
+    // public function setStartDateAttribute($value)
+    // { 
+      
 
-        $this->attributes['start_date'] =empty($value) ? date('Y-m-d H:i:s') : $value;
-    }
-    public function setEndDateAttribute($value)
-    {
-        $this->attributes['end_date'] =empty($value) ? date('Y-m-d H:i:s') : $value;
-    }
+    //     $this->attributes['start_date'] =empty($value) ? date('Y-m-d H:i:s') : $value;
+    // }
+    // public function setEndDateAttribute($value)
+    // {
+    //     $this->attributes['end_date'] =empty($value) ? date('Y-m-d H:i:s') : $value;
+    // }
 }

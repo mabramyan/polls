@@ -63,22 +63,22 @@ class PollCrudController extends CrudController
                 'model' => "App\Models\Campaign", // foreign key model
             ]
         );
-        // $this->crud->addColumn(
-        //     [
-        //         'name' => 'start_date',
-        //         'label' => 'Start Date',
-        //         'type' => 'datetime',
+        $this->crud->addColumn(
+            [
+                'name' => 'start_date',
+                'label' => 'Start Date',
+                'type' => 'datetime',
 
-        //     ]
-        // );
-        // $this->crud->addColumn(
-        //     [
-        //         'name' => 'end_date',
-        //         'label' => 'End Date',
-        //         'type' => 'datetime',
+            ]
+        );
+        $this->crud->addColumn(
+            [
+                'name' => 'end_date',
+                'label' => 'End Date',
+                'type' => 'datetime',
 
-        //     ]
-        // );
+            ]
+        );
 
         $this->crud->addColumn(
             [
@@ -110,16 +110,16 @@ class PollCrudController extends CrudController
             //                    }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
         ]);
 
-        // $this->crud->addField([
-        //     'name' => 'start_date', // the name of the db column
-        //     'label' => 'Start Date', // the input label
-        //     'type' => 'datetime_picker',
-        // ]);
-        // $this->crud->addField([
-        //     'name' => 'end_date', // the name of the db column
-        //     'label' => 'End Date', // the input label
-        //     'type' => 'datetime_picker',
-        // ]);
+        $this->crud->addField([
+            'name' => 'start_date', // the name of the db column
+            'label' => 'Start Date', // the input label
+            'type' => 'datetime_picker',
+        ]);
+        $this->crud->addField([
+            'name' => 'end_date', // the name of the db column
+            'label' => 'End Date', // the input label
+            'type' => 'datetime_picker',
+        ]);
 
         $this->crud->addField([
             'name' => 'state', // the name of the db column
