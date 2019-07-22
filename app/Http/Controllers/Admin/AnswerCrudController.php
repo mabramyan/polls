@@ -61,7 +61,7 @@ class AnswerCrudController extends CrudController
         $this->crud->addColumn(
             [
                 // 1-n relationship
-                'label' => "Poll", // Table column heading
+                'label' => "Question", // Table column heading
                 'type' => "select",
                 'name' => 'question_id', // the column that contains the ID of that connected entity;
                 'entity' => 'question', // the method that defines the relationship in your Model
@@ -70,10 +70,20 @@ class AnswerCrudController extends CrudController
             ]
         );
 
+
+ $this->crud->addColumn(
+    [
+        'name' => 'correct', 
+        'label' => "Correct", 
+        'type' => 'check'
+     ]
+        );
+
+
         $this->crud->addColumn(
             [
                 'name' => 'state',
-                'label' => 'State',
+                'label' => 'published',
                 'type' => 'boolean',
                 // optionally override the Yes/No texts
                 'options' => [0 => 'Unpublished', 1 => 'Published']
@@ -108,11 +118,25 @@ class AnswerCrudController extends CrudController
         ]);
 
 
-       
+
+        $this->crud->addField(
+
+            [
+                'name'        => 'correct', // the name of the db column
+                'label'       => 'Correct', // the input label
+                'type'        => 'radio',
+                'options'     => [ // the key will be stored in the db, the value will be shown as label; 
+                    0 => "No",
+                    1 => "Yes"
+                ],
+                // optional
+                //'inline'      => false, // show the radios all on the same line?
+            ]
+        );
 
         $this->crud->addField([
             'name' => 'state', // the name of the db column
-            'label' => 'State', // the input label
+            'label' => 'Published', // the input label
             'type' => 'radio',
             'default' => 1,
             'options' => [ // the key will be stored in the db, the value will be shown as label; 
@@ -124,13 +148,13 @@ class AnswerCrudController extends CrudController
 
 
 
-        $this->crud->addFilter([// select2 filter
+        $this->crud->addFilter([ // select2 filter
             'name' => 'question_id',
             'type' => 'select2',
             'label' => 'Question'
-                ], function() {
+        ], function () {
             return \App\Models\Question::all()->pluck('name', 'id')->toArray();
-        }, function($value) { // if the filter is active
+        }, function ($value) { // if the filter is active
             $this->crud->addClause('where', 'question_id', $value);
         });
 
@@ -164,19 +188,17 @@ class AnswerCrudController extends CrudController
         // $options['name'] = 'question_id';
         // $this->crud->addFilter($options,2);
         $queryId = request('question_id');
-      if(!empty($queryId))
-      {
-          $this->crud->addClause('where', 'question_id', $queryId);
-      }
-        
-        return parent::reorder();
-        
-    }
-   
+        if (!empty($queryId)) {
+            $this->crud->addClause('where', 'question_id', $queryId);
+        }
 
-    public function getEntries(){
+        return parent::reorder();
+    }
+
+
+    public function getEntries()
+    {
 
         return parent::getEntries();
     }
-
 }

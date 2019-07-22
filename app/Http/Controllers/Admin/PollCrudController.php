@@ -82,7 +82,7 @@ class PollCrudController extends CrudController
         $this->crud->addColumn(
             [
                 'name' => 'state',
-                'label' => 'State',
+                'label' => 'Published',
                 'type' => 'boolean',
                 // optionally override the Yes/No texts
                 'options' => [0 => 'Unpublished', 1 => 'Published']
@@ -122,7 +122,7 @@ class PollCrudController extends CrudController
 
         $this->crud->addField([
             'name' => 'state', // the name of the db column
-            'label' => 'State', // the input label
+            'label' => 'Published', // the input label
             'type' => 'radio',
             'default' => 1,
             'options' => [ // the key will be stored in the db, the value will be shown as label; 

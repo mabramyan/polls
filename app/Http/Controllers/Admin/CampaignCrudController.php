@@ -8,6 +8,8 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\CampaignRequest as StoreRequest;
 use App\Http\Requests\CampaignRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
+use App\Http\Resources\Campaign as CampaignResource;
+use App\Models\Campaign;
 
 /**
  * Class CampaignCrudController
@@ -57,5 +59,10 @@ class CampaignCrudController extends CrudController
         // your additional operations after save here
         // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
+    }
+
+    public function getCampaings()
+    {
+        return CampaignResource::collection(Campaign::all());
     }
 }
