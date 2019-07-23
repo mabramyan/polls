@@ -201,4 +201,14 @@ class AnswerCrudController extends CrudController
 
         return parent::getEntries();
     }
+    public function edit($id)
+    {
+        $answer = \App\Models\Answer::findOrFail($id);
+        if ($answer->id && $answer->question->poll->finished) {
+            \Alert::warning(trans('Poll is finished'))->flash();
+            return back();
+        }
+        return parent::edit($id);
+    }
+
 }

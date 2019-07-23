@@ -181,4 +181,13 @@ class QuestionCrudController extends CrudController
         // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
     }
+    public function edit($id)
+    {
+        $question = \App\Models\Question::findOrFail($id);
+        if ($question->id && $question->poll->finished) {
+            \Alert::warning(trans('Poll is finished'))->flash();
+            return back();
+        }
+        return parent::edit($id);
+    }
 }
