@@ -19,7 +19,7 @@ class Poll extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['name', 'start_date', 'end_date', 'state','campaign_id'];
+    protected $fillable = ['name', 'start_date', 'end_date', 'state','finished','finished_date', 'campaign_id'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -54,6 +54,11 @@ class Poll extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
+    public function getCanEditAttribute()
+    {
+        return true;
+    }
+    
 
     /*
     |--------------------------------------------------------------------------
@@ -63,7 +68,7 @@ class Poll extends Model
 
     // public function setStartDateAttribute($value)
     // { 
-      
+
 
     //     $this->attributes['start_date'] =empty($value) ? date('Y-m-d H:i:s') : $value;
     // }

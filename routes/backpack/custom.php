@@ -13,7 +13,7 @@ Route::group([
 ], function () { // custom admin routes
     Route::post('/get_campaigns',  'CampaignCrudController@getCampaings');
     Route::get('/get_user_answers/{campaignId}/{id}',  'UserAnswerCrudController@getUserAnsers');
-    
+    Route::get('poll/{id}/finish', 'PollCrudController@finish');
     CRUD::resource('poll', 'PollCrudController');
     CRUD::resource('question', 'QuestionCrudController');
     CRUD::resource('answer', 'AnswerCrudController');

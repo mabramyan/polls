@@ -8,6 +8,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\PollRequest as StoreRequest;
 use App\Http\Requests\PollRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
+use Illuminate\Support\Carbon;
 
 /**
  * Class PollCrudController
@@ -26,8 +27,12 @@ class PollCrudController extends CrudController
         $this->crud->setModel('App\Models\Poll');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/poll');
         $this->crud->setEntityNameStrings('poll', 'polls');
-
-        /*
+        $this->crud->addButtonFromView('line', 'finish', 'finish', 'beginning');        
+        $this->crud->addButtonFromView('line', 'customedit', 'customedit', 'end');        
+        $this->crud->addButtonFromView('line', 'customdelete', 'customdelete', 'end');        
+        $this->crud->removeButton('update');
+        $this->crud->removeButton('delete');
+                /*
         |--------------------------------------------------------------------------
         | CrudPanel Configuration
         |--------------------------------------------------------------------------
@@ -164,5 +169,36 @@ class PollCrudController extends CrudController
         // your additional operations after save here
         // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
+    }
+    public function edit($id)
+    {
+        $poll = \App\Models\Poll::findOrFail($id);
+
+        if ($poll->id && !$poll->canEdit) {
+            \Alert::warning(trans('Poll is finished'))->flash();
+            return back();
+        }
+        return parent::edit($id);
+    }
+
+    public function finish($id)
+    {
+        $poll = \App\Models\Poll::findOrFail($id);
+        $current = Carbon::now();
+
+
+        if (!$poll->finished) {
+
+            $poll->finished = 1;
+            $poll->finished_date = $current;
+            if ($poll->save()) {
+                \Alert::success(trans('Saved sccess'))->flash();
+                return back();
+            }
+            \Alert::error(trans('Error: can\'t save'))->flash();
+            return back();
+        }
+        \Alert::warning(trans('Poll is finished'))->flash();
+        return back();
     }
 }
