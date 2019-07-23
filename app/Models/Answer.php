@@ -38,6 +38,7 @@ class Answer extends Model
     {
         return $this->belongsTo('App\Models\Question');
     }
+    
 
     /*
     |--------------------------------------------------------------------------
@@ -50,6 +51,11 @@ class Answer extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
+    public function getPollIdAttribute()
+    {
+
+        return $this->question->poll->id;
+    }
 
     /*
     |--------------------------------------------------------------------------

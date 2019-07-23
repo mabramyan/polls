@@ -56,8 +56,24 @@ class AnswerCrudController extends CrudController
         //         'label' => 'Team 2',
         //         'type' => 'text',
         //     ]
-        // );
-
+        // ); 
+ $this->crud->addColumn(
+            // [
+            //     // 1-n relationship
+            //     'label' => "Poll", // Table column heading
+            //     'type' => "select",
+            //     'name' => 'poll_id', // the column that contains the ID of that connected entity;
+            //     'entity' => 'poll', // the method that defines the relationship in your Model
+            //     'attribute' => "name", // foreign key attribute that is shown to user
+            //     'model' => "App\Models\Poll", // foreign key model
+            // ]
+            [ // select_from_array
+                'name' => 'poll_id',
+                'label' => "Poll",
+                'type' => 'select_from_array',
+                'options' => \App\Models\Poll::all()->pluck('name','id')->toArray(),
+            ]
+        );
         $this->crud->addColumn(
             [
                 // 1-n relationship
@@ -71,12 +87,12 @@ class AnswerCrudController extends CrudController
         );
 
 
- $this->crud->addColumn(
-    [
-        'name' => 'correct', 
-        'label' => "Correct", 
-        'type' => 'check'
-     ]
+        $this->crud->addColumn(
+            [
+                'name' => 'correct',
+                'label' => "Correct",
+                'type' => 'check'
+            ]
         );
 
 
@@ -110,11 +126,10 @@ class AnswerCrudController extends CrudController
             'entity' => 'question', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
             'model' => "App\Models\Question", // foreign key model
-            
-                       'options' => (function ($query)
-                               {
-                                   return $query->orderBy('id', 'DESC')->get();
-                               }), 
+
+            'options' => (function ($query) {
+                return $query->orderBy('id', 'DESC')->get();
+            }),
         ]);
 
 
@@ -210,5 +225,4 @@ class AnswerCrudController extends CrudController
         }
         return parent::edit($id);
     }
-
 }
