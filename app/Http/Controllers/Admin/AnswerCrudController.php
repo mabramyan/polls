@@ -110,11 +110,11 @@ class AnswerCrudController extends CrudController
             'entity' => 'question', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
             'model' => "App\Models\Question", // foreign key model
-            // optional
-            //            'options' => (function ($query)
-            //                    {
-            //                        return $query->orderBy('name', 'ASC')->where('depth', 1)->get();
-            //                    }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+            
+                       'options' => (function ($query)
+                               {
+                                   return $query->orderBy('id', 'DESC')->get();
+                               }), 
         ]);
 
 
