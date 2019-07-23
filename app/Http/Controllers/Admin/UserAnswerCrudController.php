@@ -37,8 +37,12 @@ class UserAnswerCrudController extends CrudController
 
         $t = request()->input('state');
         if (!isset($t)) {
-            $this->crud->addClause('where', 'state', 1);
+            $this->crud->addClause('where', 'user_answers.state', 1);
         }
+        $this->crud->addClause('JOIN', 'polls', 'user_answers.poll_id', '=', 'polls.id');
+        $this->crud->addClause('JOIN', 'questions', 'user_answers.question_id', '=', 'questions.id');
+        $this->crud->addClause('JOIN', 'campaigns', 'user_answers.campaign_id', '=', 'campaigns.id');
+        $this->crud->addClause('SELECT', 'user_answers.*');
 
 
         /*
@@ -68,7 +72,7 @@ class UserAnswerCrudController extends CrudController
                 // 1-n relationship
                 'label' => "Campaign", // Table column heading
                 'type' => "select",
-                'name' => 'campaign_id', // the column that contains the ID of that connected entity;
+                'name' => 'user_answers.campaign_id', // the column that contains the ID of that connected entity;
                 'entity' => 'campaign', // the method that defines the relationship in your Model
                 'attribute' => "name", // foreign key attribute that is shown to user
                 'model' => "App\Models\Campaign", // foreign key model
@@ -79,7 +83,7 @@ class UserAnswerCrudController extends CrudController
                 // 1-n relationship
                 'label' => "Poll", // Table column heading
                 'type' => "select",
-                'name' => 'poll_id', // the column that contains the ID of that connected entity;
+                'name' => 'user_answers.poll_id', // the column that contains the ID of that connected entity;
                 'entity' => 'poll', // the method that defines the relationship in your Model
                 'attribute' => "name", // foreign key attribute that is shown to user
                 'model' => "App\Models\Poll", // foreign key model
@@ -91,7 +95,7 @@ class UserAnswerCrudController extends CrudController
                 // 1-n relationship
                 'label' => "Question", // Table column heading
                 'type' => "select",
-                'name' => 'question_id', // the column that contains the ID of that connected entity;
+                'name' => 'user_answers.question_id', // the column that contains the ID of that connected entity;
                 'entity' => 'question', // the method that defines the relationship in your Model
                 'attribute' => "name", // foreign key attribute that is shown to user
                 'model' => "App\Models\Question", // foreign key model
@@ -102,7 +106,7 @@ class UserAnswerCrudController extends CrudController
                 // 1-n relationship
                 'label' => "Answer", // Table column heading
                 'type' => "select",
-                'name' => 'answer_id', // the column that contains the ID of that connected entity;
+                'name' => 'user_answers.answer_id', // the column that contains the ID of that connected entity;
                 'entity' => 'answer', // the method that defines the relationship in your Model
                 'attribute' => "name", // foreign key attribute that is shown to user
                 'model' => "App\Models\Answer", // foreign key model
@@ -128,7 +132,7 @@ class UserAnswerCrudController extends CrudController
             ],
             false,
             function ($value) { // if the filter is active
-                $this->crud->addClause('where', 'user_id', 'LIKE', "%$value%");
+                $this->crud->addClause('where', 'user_answers.user_id', 'LIKE', "%$value%");
             }
         );
 
@@ -140,7 +144,7 @@ class UserAnswerCrudController extends CrudController
         ], function () {
             return \App\Models\Campaign::all()->pluck('name', 'id')->toArray();
         }, function ($value) { // if the filter is active
-            $this->crud->addClause('where', 'campaign_id', $value);
+            $this->crud->addClause('where', 'user_answers.campaign_id', $value);
         });
 
         $this->crud->addFilter([ // select2 filter
@@ -150,7 +154,7 @@ class UserAnswerCrudController extends CrudController
         ], function () {
             return \App\Models\Campaign::all()->pluck('name', 'id')->toArray();
         }, function ($value) { // if the filter is active
-            $this->crud->addClause('where', 'poll_id', $value);
+            $this->crud->addClause('where', 'user_answers.poll_id', $value);
         });
 
         $this->crud->addFilter([ // select2 filter
@@ -177,18 +181,18 @@ class UserAnswerCrudController extends CrudController
         $this->crud->addFilter(
             [ // daterange filter
                 'type' => 'date_range',
-                'name' => 'from_to',
+                'name' => 'user_answers.from_to',
                 'label' => 'Date range'
             ],
             false,
             function ($value) { // if the filter is active, apply these constraints
                 $dates = json_decode($value);
-                $this->crud->addClause('where', 'created_at', '>=', $dates->from);
-                $this->crud->addClause('where', 'created_at', '<=', $dates->to . ' 23:59:59');
+                $this->crud->addClause('where', 'user_answers.created_at', '>=', $dates->from);
+                $this->crud->addClause('where', 'user_answers.created_at', '<=', $dates->to . ' 23:59:59');
             }
         );
         $this->crud->addFilter([ // select2 filter
-            'name' => 'state',
+            'name' => 'user_answers.state',
             'type' => 'select2',
             'label' => 'Published'
         ], function () {
@@ -200,7 +204,7 @@ class UserAnswerCrudController extends CrudController
             ];
         }, function ($value) { // if the filter is active
             if ($value > 0) {
-                $this->crud->addClause('where', 'state', ($value));
+                $this->crud->addClause('where', 'user_answers.state', ($value));
             }
         });
 
@@ -230,14 +234,9 @@ class UserAnswerCrudController extends CrudController
     }
 
 
-    public function getUserAnsers($campaignId,$id)
+    public function getUserAnsers($campaignId, $id)
     {
-     
-        return response()->json(['success' => UserAnswerResource::collection(UserAnswer::where([['user_id',$id],['campaign_id',$campaignId]])->get())], 200);
-        
 
-
-      
+        return response()->json(['success' => UserAnswerResource::collection(UserAnswer::where([['user_id', $id], ['campaign_id', $campaignId]])->get())], 200);
     }
-
 }

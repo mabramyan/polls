@@ -38,6 +38,7 @@ class QuestionCrudController extends CrudController
         // TODO: remove setFromDb() and manually define Fields and Columns
         //$this->crud->setFromDb();
 
+        
 
         $this->crud->addColumn(
             [
@@ -103,40 +104,39 @@ class QuestionCrudController extends CrudController
             'entity' => 'poll', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
             'model' => "App\Models\Poll", // foreign key model
-                // optional
-//            'options' => (function ($query)
-//                    {
-//                        return $query->orderBy('name', 'ASC')->where('depth', 1)->get();
-//                    }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+            'options' => (function ($query)
+            {
+                return $query->orderBy('id', 'DESC')->get();
+            }), 
         ]);
 
 
-        $this->crud->addField([
-            'name' => 'start_date', // the name of the db column
-            'label' => 'Start Date', // the input label
-            'type' => 'datetime_picker',
-        ]);
-        $this->crud->addField([
-            'name' => 'end_date', // the name of the db column
-            'label' => 'End Date', // the input label
-            'type' => 'datetime_picker',
-        ]);
-        $this->crud->addColumn(
-            [
-                'name' => 'start_date',
-                'label' => 'Start Date',
-                'type' => 'datetime',
+        // $this->crud->addField([
+        //     'name' => 'start_date', // the name of the db column
+        //     'label' => 'Start Date', // the input label
+        //     'type' => 'datetime_picker',
+        // ]);
+        // $this->crud->addField([
+        //     'name' => 'end_date', // the name of the db column
+        //     'label' => 'End Date', // the input label
+        //     'type' => 'datetime_picker',
+        // ]);
+        // $this->crud->addColumn(
+        //     [
+        //         'name' => 'start_date',
+        //         'label' => 'Start Date',
+        //         'type' => 'datetime',
                 
-            ]
-        );
-        $this->crud->addColumn(
-            [
-                'name' => 'end_date',
-                'label' => 'End Date',
-                'type' => 'datetime',
+        //     ]
+        // );
+        // $this->crud->addColumn(
+        //     [
+        //         'name' => 'end_date',
+        //         'label' => 'End Date',
+        //         'type' => 'datetime',
                 
-            ]
-        );
+        //     ]
+        // );
         $this->crud->addField([
             'name' => 'state', // the name of the db column
             'label' => 'Published', // the input label
@@ -180,5 +180,14 @@ class QuestionCrudController extends CrudController
         // your additional operations after save here
         // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
+    }
+    public function edit($id)
+    {
+        $question = \App\Models\Question::findOrFail($id);
+        if ($question->id && $question->poll->finished) {
+            \Alert::warning(trans('Poll is finished'))->flash();
+            return back();
+        }
+        return parent::edit($id);
     }
 }

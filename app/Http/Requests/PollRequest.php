@@ -26,7 +26,10 @@ class PollRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+             'name' => 'required|min:3|max:255',
+             'campaign_id' => 'required',
+             'start_date' => 'required',
+             'end_date' => 'required',
         ];
     }
 
