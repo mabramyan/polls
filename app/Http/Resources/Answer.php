@@ -21,6 +21,7 @@ class Answer extends JsonResource
             'end_date' => $this->end_date,
             'end_date' => $this->end_date,
             'state' => $this->state,
+            'correct'=>$this->correct,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

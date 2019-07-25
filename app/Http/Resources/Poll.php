@@ -19,6 +19,7 @@ class Poll extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'campaign_id'=>(int) $this->campaign_id,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'end_date' => $this->end_date,

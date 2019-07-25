@@ -234,9 +234,12 @@ class UserAnswerCrudController extends CrudController
     }
 
 
-    public function getUserAnsers($campaignId, $id)
+    public function getUserAnsers($pollId)
     {
 
-        return response()->json(['success' => UserAnswerResource::collection(UserAnswer::where([['user_id', $id], ['campaign_id', $campaignId]])->get())], 200);
+        return response()->json(['success' => UserAnswerResource::collection(UserAnswer::where([['poll_id', $pollId], ['user_answers.state', 1]])
+        ->select(['user_answers.*','answers.correct'])
+        ->join('answers', 'answers.id', '=', 'user_answers.answer_id')
+        ->get())], 200);
     }
 }
