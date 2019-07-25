@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 
-class Poll extends Model
+class Team extends Model
 {
     use CrudTrait;
 
@@ -15,11 +15,11 @@ class Poll extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'polls';
+    protected $table = 'teams';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['name', 'start_date', 'end_date', 'state', 'finished', 'finished_date', 'campaign_id', 'number'];
+    protected $fillable = ['name'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -34,14 +34,6 @@ class Poll extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function campaign()
-    {
-        return $this->belongsTo('App\Models\Campaign');
-    }
-    public function questions()
-    {
-        return $this->hasMany('App\Models\Question');
-    }
 
     /*
     |--------------------------------------------------------------------------
@@ -54,31 +46,10 @@ class Poll extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
-    public function getCanEditAttribute()
-    {
-        return true;
-    }
-
 
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
     |--------------------------------------------------------------------------
     */
-
-    public function setNumberAttribute($value)
-    {
-        $maxNumber = Poll::max('number');
-        if (empty($maxNumber)) {
-            $this->attributes['number']  = 1;
-            return 1;
-        } else {
-            $this->attributes['number']  = $maxNumber + 1;
-            return $maxNumber + 1;
-        }
-    }
-    // public function setEndDateAttribute($value)
-    // {
-    //     $this->attributes['end_date'] =empty($value) ? date('Y-m-d H:i:s') : $value;
-    // }
 }

@@ -56,6 +56,14 @@ class Question extends Model
     {
         return $this->hasMany('App\Models\Answer');
     }
+    public function team1()
+    {
+        return $this->belongsTo('App\Models\Poll','team_1');
+    }
+    public function team2()
+    {
+        return $this->belongsTo('App\Models\Poll','team_2');
+    }
 
     /*
     |--------------------------------------------------------------------------

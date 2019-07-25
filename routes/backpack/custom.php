@@ -14,9 +14,11 @@ Route::group([
     Route::post('/get_campaigns',  'CampaignCrudController@getCampaings');
     Route::get('/get_user_answers/{pollId}',  'UserAnswerCrudController@getUserAnsers');
     Route::get('poll/{id}/finish', 'PollCrudController@finish');
+    Route::get('/question/{id}','QuestionCrudController@getQuestion');
     CRUD::resource('poll', 'PollCrudController');
     CRUD::resource('question', 'QuestionCrudController');
     CRUD::resource('answer', 'AnswerCrudController');
     CRUD::resource('campaign', 'CampaignCrudController');
     CRUD::resource('user_answer', 'UserAnswerCrudController');
+    CRUD::resource('team', 'TeamCrudController');
 }); // this should be the absolute last line of this file

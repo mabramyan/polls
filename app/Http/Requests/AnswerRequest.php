@@ -28,6 +28,7 @@ class AnswerRequest extends FormRequest
         return [
              'name' => 'required|min:3|max:255',
              'question_id' => 'required',
+             'team_id' => 'required',
         ];
     }
 

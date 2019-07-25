@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="col-md-12">
-        <div v-if="groupedAnswers && searched" class="panel panel-default">
+        <div v-if="groupedAnswers && selectedPoll && searched" class="panel panel-default">
           <div class="panel-heading">
             <strong>Total report</strong>
             <export-excel
@@ -141,6 +141,8 @@ export default {
     filterPolls: function($event) {
       this.selectedPoll = "";
       this.searched = false;
+      this.groupedAnswers = [];
+
     },
 
     filteredPolls: function($event) {
@@ -155,7 +157,6 @@ export default {
           if (response.data.success && response.data.success.length) {
             this.answers = response.data.success;
             this.searched = true;
-
             this.groupedAnswers = this.answers.reduce(
               (objectsByKeyValue, obj) => ({
                 ...objectsByKeyValue,

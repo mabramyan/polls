@@ -110,12 +110,37 @@ class QuestionCrudController extends CrudController
             }), 
         ]);
 
+        $this->crud->addField([// Select2
+            'label' => "Team 1",
+            'type' => 'select2',
+            'name' => 'team_1', // the db column for the foreign key
+            'entity' => 'team1', // the method that defines the relationship in your Model
+            'attribute' => 'name', // foreign key attribute that is shown to user
+            'model' => "App\Models\Team", // foreign key model
+            'options' => (function ($query)
+            {
+                return $query->orderBy('name', 'ASC')->get();
+            }), 
+        ]);
+        $this->crud->addField([// Select2
+            'label' => "Team 2",
+            'type' => 'select2',
+            'name' => 'team_2', // the db column for the foreign key
+            'entity' => 'team2', // the method that defines the relationship in your Model
+            'attribute' => 'name', // foreign key attribute that is shown to user
+            'model' => "App\Models\Team", // foreign key model
+            'options' => (function ($query)
+            {
+                return $query->orderBy('name', 'ASC')->get();
+            }), 
+        ]);
 
-        // $this->crud->addField([
-        //     'name' => 'start_date', // the name of the db column
-        //     'label' => 'Start Date', // the input label
-        //     'type' => 'datetime_picker',
-        // ]);
+
+        $this->crud->addField([
+            'name' => 'start_date', // the name of the db column
+            'label' => 'Start Date', // the input label
+            'type' => 'datetime_picker',
+        ]);
         // $this->crud->addField([
         //     'name' => 'end_date', // the name of the db column
         //     'label' => 'End Date', // the input label
@@ -190,4 +215,10 @@ class QuestionCrudController extends CrudController
         }
         return parent::edit($id);
     }
+     public function getQuestion($id)
+    {
+      return \App\Models\Question::findOrFail($id);
+       
+    }
+    
 }

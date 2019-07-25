@@ -57,7 +57,7 @@ class AnswerCrudController extends CrudController
         //         'type' => 'text',
         //     ]
         // ); 
- $this->crud->addColumn(
+        $this->crud->addColumn(
             // [
             //     // 1-n relationship
             //     'label' => "Poll", // Table column heading
@@ -71,7 +71,7 @@ class AnswerCrudController extends CrudController
                 'name' => 'poll_id',
                 'label' => "Poll",
                 'type' => 'select_from_array',
-                'options' => \App\Models\Poll::all()->pluck('name','id')->toArray(),
+                'options' => \App\Models\Poll::all()->pluck('name', 'id')->toArray(),
             ]
         );
         $this->crud->addColumn(
@@ -130,9 +130,35 @@ class AnswerCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('id', 'DESC')->get();
             }),
+            'attributes' => [
+                'class' => 'form-control changed_team',
+                
+              ], 
         ]);
 
+        $this->crud->addField([ // Select2
+            'label' => "Team",
+            'type' => 'select2',
+            'name' => 'team_id', // the db column for the foreign key
+            'entity' => 'team', // the method that defines the relationship in your Model
+            'attribute' => 'name', // foreign key attribute that is shown to user
+            'model' => "App\Models\Team", // foreign key model
 
+            'options' => (function ($query) {
+                if (!empty($this->crud->entry) && $this->crud->entry->id) {
+                    $ans =  \App\Models\Answer::find($this->crud->entry->id);
+                    if (!empty($ans->question->team_1) && !empty($ans->question->team_2)) {
+                        $query->whereIn('id', [$ans->question->team_1, $ans->question->team_2]);
+                    }
+                }
+
+                return $query->orderBy('id', 'DESC')->get();
+            }),
+            'attributes' => [
+                'class' => 'form-control target_team',
+                
+              ], 
+        ]);
 
         $this->crud->addField(
 

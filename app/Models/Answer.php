@@ -19,7 +19,7 @@ class Answer extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['name','question_id','state','correct'];
+    protected $fillable = ['name','question_id','state','correct','team_id'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -37,6 +37,10 @@ class Answer extends Model
     public function question()
     {
         return $this->belongsTo('App\Models\Question');
+    }
+    public function team()
+    {
+        return $this->belongsTo('App\Models\Team');
     }
     
 
