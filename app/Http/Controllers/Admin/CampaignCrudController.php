@@ -9,7 +9,9 @@ use App\Http\Requests\CampaignRequest as StoreRequest;
 use App\Http\Requests\CampaignRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
 use App\Http\Resources\Campaign as CampaignResource;
+use App\Http\Resources\Poll as PollResource;
 use App\Models\Campaign;
+use App\Models\Poll;
 
 /**
  * Class CampaignCrudController
@@ -63,6 +65,17 @@ class CampaignCrudController extends CrudController
 
     public function getCampaings()
     {
-        return CampaignResource::collection(Campaign::all());
+
+
+
+        return response()->json([
+            'success' => ['campaigns'=>CampaignResource::collection(Campaign::all()),
+            'polls'=>PollResource::collection(Poll::all())
+            ]
+        ], 200);
+
+
+
+
     }
 }

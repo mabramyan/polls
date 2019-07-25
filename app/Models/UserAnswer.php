@@ -133,6 +133,10 @@ class UserAnswer extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
+    public function getCorrectAttribute($value)
+    {
+        return isset($value) ? $value : null;
+    }
 
     /*
     |--------------------------------------------------------------------------

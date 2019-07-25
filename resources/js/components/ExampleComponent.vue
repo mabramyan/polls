@@ -2,51 +2,98 @@
   <div class="box" style="padding:10px">
     <div class="row">
       <div class="col-md-12">
-        <div class="form-group">
-          <select v-model="selected">
-            <option disabled value>Select Campaign</option>
-            <option
-              v-for="camp in campaigns "
-              v-bind:key="camp.id"
-              v-bind:value="camp.id"
-            >{{ camp.name }}</option>
-          </select>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <select class="form-control" v-model="selected" @change="filterPolls($event)">
+                <option disabled value>Select Campaign</option>
+                <option
+                  v-for="camp in campaigns "
+                  v-bind:key="camp.id"
+                  v-bind:value="camp.id"
+                >{{ camp.name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <select v-if="selected" class="form-control" v-model="selectedPoll">
+                <option disabled value>Select Poll</option>
+                <option
+                  v-for="poll in filteredPolls() "
+                  v-bind:key="poll.id"
+                  v-bind:value="poll"
+                >{{ poll.name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <button
+                v-if="selected && selectedPoll"
+                v-on:click="search()"
+                class="btn btn-success"
+              >Search</button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-md-12">
-        <div class="form-group">
-          <input class="form-control" v-on:change="search" v-model="userId" placeholder="User ID" />
+        <div v-if="groupedAnswers && searched" class="panel panel-default">
+          <div class="panel-heading">
+            <strong>Total report</strong>
+            <export-excel
+              class="btn btn-success pull-right mb-1"
+              :data="json_data"
+              :fields="json_fields"
+              worksheet="My Worksheet"
+              name="filename.xls"
+            >Download Excel</export-excel>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Total</th>
+                <th>Correct</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-bind:key="index" v-for="(gAnswer,index) in groupedAnswers">
+                <td>{{index}}</td>
+                <td>{{gAnswer.length}}</td>
+                <td>{{gAnswer.filter(qA=>qA.correct==1).length}}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-      <div class="col-md-12" v-if="answers">
-        <div class="container-fluid">
-          <ul class="list-group">
-            <li class="list-group-item active">{{findSeletedCampaign().name}}</li>
-            <li
-              class="list-group-item list-group-item-info"
-              :key="poll.id"
-              v-for="poll in findSeletedCampaign().polls"
-            >
-              <div href="#" class="list-group-item list-group-item-info"><strong>{{poll.name}}</strong> <span class="pull-right"><strong>User prediction: {{hasPredictionInPoll(poll.id)?hasPredictionInPoll(poll.id):'No prediction'}}</strong></span></div>
-              <ul class="list-group">
-                <li
-                  class="list-group-item list-group-item-success"
-                  v-for="question in poll.questions"
-                  :key="question.id"
-                >
-                  <a href="#" class="list-group-item list-group-item-success">{{question.name}}</a>
-                  <ul class="list-group">
-                    <li
-                      class="list-group-item list-group-item-warning"
-                      v-for="answer in question.answers"
-                      :key="answer.id"
-                    >{{answer.name}}</li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+
+        <ul v-if="selectedPoll && searched" class="list-group">
+          <li
+            class="list-group-item list-group-item-success"
+            v-bind:key="question.id"
+            v-for="question in selectedPoll.questions"
+          >
+            <strong>{{question.name}}</strong>
+            <span
+              class="pull-right"
+            >Total: ({{totalAnswers(question).length}}) , Correct: ({{correctAnswers(question).length}})</span>
+            <ul class="list-group">
+              <li
+                class="list-group-item list-group-item-info"
+                v-for="userAnswer in totalAnswers(question)"
+                v-bind:key="userAnswer.id"
+              >
+                <strong>User ID: {{userAnswer.user_id }}</strong>
+                <span
+                  v-html="question.answers.find(an=>an.id==userAnswer.answer_id?an:false).correct?
+                '<span class=\'btn btn-success \'><span class=\'glyphicon glyphicon glyphicon-ok\' aria-hidden=\'true\'></span></span>'
+                :'<span class=\'btn btn-danger \'><span class=\'glyphicon glyphicon-remove\' aria-hidden=\'true\'></span></span>' "
+                ></span>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -58,54 +105,125 @@ export default {
     return {
       userId: null,
       loading: true,
+      polls: [],
       errored: false,
       answers: false,
+      groupedAnswers: false,
       selected: "",
+      selectedPoll: "",
       seletedCampaign: false,
-      campaigns: []
+      searched: false,
+      campaigns: [],
+      json_fields: {
+        User: "user_id",
+        Total: "total",
+        Correct: "correct"
+      },
+      json_data: [
+        {
+          user_id: "Tony Peña",
+          total: "New York",
+          correct: "United States"
+        }
+      ],
+      json_meta: [
+        [
+          {
+            key: "charset",
+            value: "utf-8"
+          }
+        ]
+      ]
     };
   },
   methods: {
+    getJsonData: () => this.json_data,
+    filterPolls: function($event) {
+      this.selectedPoll = "";
+      this.searched = false;
+    },
+
+    filteredPolls: function($event) {
+      return this.polls.filter(poll => poll.campaign_id == this.selected);
+
+    },
+
     search: function() {
-      console.log("search");
       axios
-        .get("/admin/get_user_answers/" + this.selected + "/" + this.userId)
+        .get("/admin/get_user_answers/" + this.selected)
         .then(response => {
           if (response.data.success && response.data.success.length) {
             this.answers = response.data.success;
-            this.findSeletedCampaign();
+            this.searched = true;
+
+            this.groupedAnswers = this.answers.reduce(
+              (objectsByKeyValue, obj) => ({
+                ...objectsByKeyValue,
+                [obj["user_id"]]: (
+                  objectsByKeyValue[obj["user_id"]] || []
+                ).concat(obj)
+              }),
+              {}
+            );
+            let t = JSON.parse(JSON.stringify(this.groupedAnswers));
+
+            this.json_data = 
+                Object.keys(t).map(function(key, index) {
+                  
+                  return {
+                    user_id: key,
+                    total: t[key].length,
+                    correct: t[key].filter(a => a.correct == 1).length
+                  };
+                })
+              ;
+
           } else {
             this.answers = false;
           }
-          console.log(this.answers);
         })
         .catch(error => {
-          console.log(error);
           this.errored = true;
         })
-        .finally(() => (this.loading = false));
+        .finally(() => (this.loading = false));       
+
     },
+
     findSeletedCampaign: function() {
       return this.campaigns.reduce(function(a, b) {
         return b.id == this.selected ? b : {};
       });
     },
+
     hasPredictionInPoll(pollId) {
- console.log(pollId)
-      
+
       return this.answers.reduce(function(a, b) {
-        console.log(a)
-        console.log(b)
-        
-        return pollId == b.poll_id?a+1:a;
-      },0);
+
+        return pollId == b.poll_id ? a + 1 : a;
+      }, 0);
+    },
+
+    totalAnswers: function(question) {
+      return this.answers.filter(answer =>
+        question.id == answer.question_id ? answer : false
+      );
+    },
+
+    correctAnswers: function(question) {
+      return this.answers.filter(answer =>
+        question.id == answer.question_id ? answer : false
+      );
     }
   },
+
   mounted() {
     axios
       .post("/admin/get_campaigns")
       .then(response => {
-        this.campaigns = response.data.data;
+        if (response.data.success) {
+          this.campaigns = response.data.success.campaigns;
+          this.polls = response.data.success.polls;
+        }
       })
       .catch(error => {
         console.log(error);

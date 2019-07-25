@@ -20,6 +20,7 @@ class UserAnswer extends JsonResource
             'campaign_id' => $this->campaign_id,
             'question_id' => $this->question_id,
             'poll_id' => $this->poll_id,
+            'correct'=>$this->correct,
             'answer_id' => $this->answer_id,
             'created_at' => $this->created_at,
         ];
