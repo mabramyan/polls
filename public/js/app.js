@@ -1843,6 +1843,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     filterPolls: function filterPolls($event) {
       this.selectedPoll = "";
       this.searched = false;
+      this.groupedAnswers = [];
     },
     filteredPolls: function filteredPolls($event) {
       var _this2 = this;
@@ -37994,7 +37995,7 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-md-12" }, [
-        _vm.groupedAnswers && _vm.searched
+        _vm.groupedAnswers && _vm.selectedPoll && _vm.searched
           ? _c("div", { staticClass: "panel panel-default" }, [
               _c(
                 "div",
