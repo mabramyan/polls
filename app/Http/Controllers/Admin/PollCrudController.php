@@ -101,6 +101,10 @@ class PollCrudController extends CrudController
             'label' => 'Name', // the input label
             'type' => 'text',
         ]);
+        $this->crud->addField([
+            'name' => 'number',
+            'type' => 'hidden',
+        ]);
         $this->crud->addField([ // Select2
             'label' => "Campaign",
             'type' => 'select2',
