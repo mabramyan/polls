@@ -14,7 +14,7 @@ jQuery(function ($) {
             if (obj.target.value) {
                 $('.target_team').val('');
                 $.ajax({
-                    url: '/getquestion/' + obj.target.value, 
+                    url: '/admin/getquestion/' + obj.target.value, 
                     success: function (response) {
                         if (response.id) {
 
