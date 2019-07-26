@@ -20,3 +20,5 @@ deploy_to_production:
     - php artisan config:cache
     - php artisan view:clear
     - php artisan passport:keys
+    - php artisan vendor:publish --tag=passport-components
+
