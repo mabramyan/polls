@@ -68,14 +68,16 @@ class Poll extends Model
 
     public function setNumberAttribute($value)
     {
+      
         $maxNumber = Poll::max('number');
-        if (empty($maxNumber)) {
+        if(empty($this->attributes['id']))
+        {if (empty($maxNumber)) {
             $this->attributes['number']  = 1;
             return 1;
         } else {
             $this->attributes['number']  = $maxNumber + 1;
             return $maxNumber + 1;
-        }
+        }}
     }
     // public function setEndDateAttribute($value)
     // {
