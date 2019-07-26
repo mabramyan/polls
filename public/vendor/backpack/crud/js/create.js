@@ -14,7 +14,7 @@ jQuery(function ($) {
             if (obj.target.value) {
                 $('.target_team').val('');
                 $.ajax({
-                    url: '/admin/question/' + obj.target.value,
+                    url: '/getquestion/' + obj.target.value, 
                     success: function (response) {
                         if (response.id) {
 
@@ -39,7 +39,7 @@ jQuery(function ($) {
 
         if ( $('.changed_team').val()) {
             $.ajax({
-                url: '/admin/question/' + $('.changed_team').val(),
+                url: '/admin/getquestion/' + $('.changed_team').val(),
                 success: function (response) {
                     if (response.id) {
                         $('.target_team option').each(function (a, b) {

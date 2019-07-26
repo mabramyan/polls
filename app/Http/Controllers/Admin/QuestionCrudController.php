@@ -217,6 +217,8 @@ class QuestionCrudController extends CrudController
     }
      public function getQuestion($id)
     {
+        $this->crud->setModel('App\Models\Question');
+        $this->crud->setRoute(config('backpack.base.route_prefix') . '/question');
       return \App\Models\Question::findOrFail($id);
        
     }
