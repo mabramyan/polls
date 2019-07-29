@@ -11,6 +11,8 @@ use App\Exceptions\ApiException;
 use App\Models\Answer;
 use App\Models\UserAnswer;
 use App\Http\Resources\Answer as AppAnswer;
+use Illuminate\Support\Str;
+
 
 class UserController extends Controller
 {
@@ -24,8 +26,18 @@ class UserController extends Controller
     {
         if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
             $user = Auth::user();
-            $success['token'] =  $user->createToken('MyApp')->accessToken;
-            return response()->json(['success' => $success], $this->successStatus);
+            $token = Str::random(60);
+
+            $user->forceFill([
+            'api_token' => hash('sha256', $token),
+        ])->save();
+
+        return ['token' => $token];
+
+
+
+            // $success['token'] =  $user->createToken('MyApp')->accessToken;
+            // return response()->json(['success' => $success], $this->successStatus);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
         }
