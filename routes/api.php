@@ -20,11 +20,9 @@ use Illuminate\Http\Request;
 Route::get('login', 'API\UserController@login');
 //Route::post('register', 'API\UserController@register');
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::post('details', 'API\UserController@details');
-    Route::get('poll', 'API\PollController@getPoll');
+    Route::get('polls/{campaign_id?}', 'API\PollController@getPolls');
     Route::get('poll/{id?}', 'API\PollController@getPoll');
-    Route::post('vote', 'API\UserController@vote');
-    Route::put('vote', 'API\UserController@voteUpdate');
-
+    Route::get('vote', 'API\UserController@vote');
+    Route::get('voteupdate', 'API\UserController@voteUpdate');
    // Route::get('poll', 'API\PollController@getPoll');
 });
