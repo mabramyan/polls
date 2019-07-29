@@ -49,7 +49,7 @@ class PollController extends Controller
         $where = [['campaign_id', $campaign_id],['user_id',$user_id],['state',1]];
         if(!empty($poll_id))
         {
-            $where[]=['poll_id'=>$poll_id];
+            $where[]=['poll_id',$poll_id];
         }
        $answers =  UserAnswer::where($where)->get();
        return response()->json(['success'=> UserAnswerResource::collection($answers)]);
