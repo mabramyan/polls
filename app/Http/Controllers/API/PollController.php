@@ -39,7 +39,7 @@ class PollController extends Controller
         }
      
 
-        return  Polls::collection($fined);
+       return response()->json(['success'=>Polls::collection($fined)])  ;
     }
 
     public function getActivePoll()
