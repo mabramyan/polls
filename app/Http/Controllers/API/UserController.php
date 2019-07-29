@@ -29,7 +29,7 @@ class UserController extends Controller
             $token = Str::random(60);
 
             $user->forceFill([
-            'api_token' => hash('sha256', $token),
+            'api_token' =>$token// hash('sha256', $token),
         ])->save();
 
         return ['token' => $token];
