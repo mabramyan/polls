@@ -33,7 +33,7 @@ class PollController extends Controller
            throw new ApiException("Campaign not found", 50);
         }
 
-        $fined = Poll
+        $fined = Poll::where([['campaign_id', $campaign_id],['state',1]])->get();
         if(empty($fined))
         {
             throw new ApiException("", 1);
@@ -42,9 +42,9 @@ class PollController extends Controller
        return response()->json(['success'=>Polls::collection($fined)])  ;
     }
 
-    public function getUserAnswers($campaign_id,$poll_id=null)
+    public function getUserAnswers($campaign_id,$user_id,$poll_id=null)
     {
-        $where = [['campaign_id', $campaign_id],['state',1]];
+        $where = [['campaign_id', $campaign_id],['user_id'=>$user_id],['state',1]];
         if(!empty($poll_id))
         {
             $where[]=['poll_id'=>$poll_id];
