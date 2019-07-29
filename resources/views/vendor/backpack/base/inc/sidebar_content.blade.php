@@ -8,3 +8,4 @@
 {{-- <li><a href='{{ url(config('backpack.base.route_prefix', 'admin') . '/setting') }}'><i class='fa fa-cog'></i> <span>Settings</span></a></li> --}}
 <li><a href='{{ backpack_url('user_answer') }}'><i class='fa fa-tag'></i> <span>Users Answer</span></a></li>
 <li><a href='{{ backpack_url('team') }}'><i class='fa fa-tag'></i> <span>Teams</span></a></li>
+<li><a href='{{ url(config('backpack.base.route_prefix', 'admin').'/log') }}'><i class='fa fa-terminal'></i> <span>Logs</span></a></li>
