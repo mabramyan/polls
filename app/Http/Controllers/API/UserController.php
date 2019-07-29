@@ -29,10 +29,10 @@ class UserController extends Controller
             $token = Str::random(60);
 
             $user->forceFill([
-            'api_token' =>$token// hash('sha256', $token),
-        ])->save();
+                'api_token' => $token // hash('sha256', $token),
+            ])->save();
 
-        return ['token' => $token];
+            return ['token' => $token];
 
 
 
@@ -54,10 +54,12 @@ class UserController extends Controller
         return response()->json(['success' => $user], $this->successStatus);
     }
 
-    public function vote(Request $request)
+    public function vote($user_id, $answer_id)
     {
-        $userId = (int) $request->input('user_id', 0);
-        $answerId = (int) $request->input('answer_id', 0);
+        // $userId = (int) $request->input('user_id', 0);
+        // $answerId = (int) $request->input('answer_id', 0);
+        $userId = (int) $user_id;
+        $answerId = (int)  $answer_id;
         if (empty($userId)) {
             throw new ApiException('Incorrect user_id', 2);
         }
@@ -69,19 +71,18 @@ class UserController extends Controller
         if (empty($answer)) {
             throw new ApiException('Answer not found', 4);
         }
-        if(UserAnswer::vote($userId, $answerId))
-        {
-           return response()->json(['success' => true], $this->successStatus);
+        if (UserAnswer::vote($userId, $answerId)) {
+            return response()->json(['success' => true], $this->successStatus);
         }
         throw new ApiException('Unknown error', 100);
     }
 
-    public function voteUpdate(Request $request)
+    public function voteUpdate($user_id, $answer_id)
     {
-
-
-        $userId = (int) $request->input('user_id', 0);
-        $answerId = (int) $request->input('answer_id', 0);
+        // $userId = (int) $request->input('user_id', 0);
+        // $answerId = (int) $request->input('answer_id', 0);
+        $userId = (int) $user_id;
+        $answerId = (int)  $answer_id;
         if (empty($userId)) {
             throw new ApiException('Incorrect user_id', 2);
         }
@@ -93,13 +94,9 @@ class UserController extends Controller
         if (empty($answer)) {
             throw new ApiException('Answer not found', 4);
         }
-        if(UserAnswer::voteUpdate($userId, $answerId))
-        {
-           return response()->json(['success' => true], $this->successStatus);
+        if (UserAnswer::voteUpdate($userId, $answerId)) {
+            return response()->json(['success' => true], $this->successStatus);
         }
         throw new ApiException('Unknown error', 100);
-        
     }
-
-
 }
