@@ -24,7 +24,7 @@ class PollController extends Controller
 
         }
 
-        return new PollResource($fined);
+        return response()->json( new PollResource($fined));
     }
     public function getPolls($campaign_id)
     {
