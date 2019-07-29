@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Poll as Poll;
 use App\Models\Answer;
+use App\Models\UserAnswer;
 use App\Http\Resources\Poll as PollResource; 
 use App\Http\Resources\Polls as Polls; 
 use App\Http\Resources\Answer as AnswerResource;
+use App\Http\Resources\UserAnswer as UserAnswerResource;
 use App\Exceptions\ApiException;
 class PollController extends Controller
 {
@@ -44,13 +46,13 @@ class PollController extends Controller
 
     public function getUserAnswers($campaign_id,$user_id,$poll_id=null)
     {
-        $where = [['campaign_id', $campaign_id],['user_id'=>$user_id],['state',1]];
+        $where = [['campaign_id', $campaign_id],['user_id',$user_id],['state',1]];
         if(!empty($poll_id))
         {
             $where[]=['poll_id'=>$poll_id];
         }
-       $answers =  Answer::where($where)->get();
-       return response()->json(['success'=> AnswerResource::collection($answers)]);
+       $answers =  UserAnswer::where($where)->get();
+       return response()->json(['success'=> UserAnswerResource::collection($answers)]);
 
     }
 
