@@ -23,8 +23,7 @@ class PollController extends Controller
             throw new ApiException("", 1);
 
         }
-
-        return response()->json( new PollResource($fined));
+        return response()->json(['success'=> new PollResource($fined)]);
     }
     public function getPolls($campaign_id)
     {
