@@ -88,7 +88,7 @@ class AnswerCrudController extends CrudController
         $this->crud->addColumn(
             [
                 // 1-n relationship
-                'label' => "Team", // Table column heading
+                'label' => "Category", // Table column heading
                 'type' => "select",
                 'name' => 'team_id', // the column that contains the ID of that connected entity;
                 'entity' => 'team', // the method that defines the relationship in your Model
@@ -148,25 +148,25 @@ class AnswerCrudController extends CrudController
         ]);
 
         $this->crud->addField([ // Select2
-            'label' => "Team",
+            'label' => "Category",
             'type' => 'select2',
             'name' => 'team_id', // the db column for the foreign key
             'entity' => 'team', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
             'model' => "App\Models\Team", // foreign key model
 
-            'options' => (function ($query) {
-                if (!empty($this->crud->entry) && $this->crud->entry->id) {
-                    $ans =  \App\Models\Answer::find($this->crud->entry->id);
-                    if (!empty($ans->question->team_1) && !empty($ans->question->team_2)) {
-                        $query->whereIn('id', [$ans->question->team_1, $ans->question->team_2]);
-                    }
-                }
+            // 'options' => (function ($query) {
+            //     if (!empty($this->crud->entry) && $this->crud->entry->id) {
+            //         $ans =  \App\Models\Answer::find($this->crud->entry->id);
+            //         if (!empty($ans->question->team_1) && !empty($ans->question->team_2)) {
+            //             $query->whereIn('id', [$ans->question->team_1, $ans->question->team_2]);
+            //         }
+            //     }
 
-                return $query->orderBy('id', 'DESC')->get();
-            }),
+            //     return $query->orderBy('id', 'DESC')->get();
+            // }),
             'attributes' => [
-                'class' => 'form-control target_team',
+                //'class' => 'form-control target_team',
                 
               ], 
         ]);

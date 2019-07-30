@@ -26,6 +26,9 @@ class TeamCrudController extends CrudController
         $this->crud->setModel('App\Models\Team');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/team');
         $this->crud->setEntityNameStrings('team', 'teams');
+        $this->crud->setHeading('Answer Categories','index');
+        $this->crud->setHeading('Answer Categories','create');
+        $this->crud->setHeading('Answer Categories','edit');
 
         /*
         |--------------------------------------------------------------------------

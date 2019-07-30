@@ -28,8 +28,8 @@ class QuestionRequest extends FormRequest
         return [
             'name' => 'required|min:3|max:255',
             'poll_id' => 'required',
-            'team_1' => 'required',
-            'team_2' => 'required',
+           // 'team_1' => 'required',
+           // 'team_2' => 'required',
             'start_date' => 'required',
         ];
     }

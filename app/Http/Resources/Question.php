@@ -19,9 +19,8 @@ class Question extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'image' => !empty($this->image) ? url('/') . '/' . $this->image : null,
             'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'end_date' => $this->end_date,
             'state' => $this->state,
             'answers' =>    AnswersResource::collection($this->answers),
             'created_at' => $this->created_at,
