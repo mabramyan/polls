@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Team as TeamResource;
+
 
 class Answer extends JsonResource
 {
@@ -17,7 +19,7 @@ class Answer extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'category'=>$this->team_id,
+            'category'=> new TeamResource($this->team) ,
             'state' => $this->state,
             'correct'=>$this->correct,
             'created_at' => $this->created_at,
