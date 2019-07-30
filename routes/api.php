@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 // });
 
 Route::get('login', 'API\UserController@login');
+Route::get('teams', 'API\SharedController@getAllTeams');
 //Route::post('register', 'API\UserController@register');
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('get-user-answers/{campaign_id}/{user_id}/{poll_id?}', 'API\PollController@getUserAnswers');
