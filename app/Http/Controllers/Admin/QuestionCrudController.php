@@ -38,7 +38,7 @@ class QuestionCrudController extends CrudController
         // TODO: remove setFromDb() and manually define Fields and Columns
         //$this->crud->setFromDb();
 
-        
+
 
         $this->crud->addColumn(
             [
@@ -72,7 +72,7 @@ class QuestionCrudController extends CrudController
                 'attribute' => "name", // foreign key attribute that is shown to user
                 'model' => "App\Models\Poll", // foreign key model
             ]
-    );
+        );
 
         $this->crud->addColumn(
             [
@@ -97,43 +97,40 @@ class QuestionCrudController extends CrudController
         //     'type' => 'text',
         // ]);
 
-        $this->crud->addField([// Select2
+        $this->crud->addField([ // Select2
             'label' => "Poll",
             'type' => 'select2',
             'name' => 'poll_id', // the db column for the foreign key
             'entity' => 'poll', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
             'model' => "App\Models\Poll", // foreign key model
-            'options' => (function ($query)
-            {
+            'options' => (function ($query) {
                 return $query->orderBy('id', 'DESC')->get();
-            }), 
+            }),
         ]);
 
-        $this->crud->addField([// Select2
-            'label' => "Team 1",
-            'type' => 'select2',
-            'name' => 'team_1', // the db column for the foreign key
-            'entity' => 'team1', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
-            'model' => "App\Models\Team", // foreign key model
-            'options' => (function ($query)
-            {
-                return $query->orderBy('name', 'ASC')->get();
-            }), 
-        ]);
-        $this->crud->addField([// Select2
-            'label' => "Team 2",
-            'type' => 'select2',
-            'name' => 'team_2', // the db column for the foreign key
-            'entity' => 'team2', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
-            'model' => "App\Models\Team", // foreign key model
-            'options' => (function ($query)
-            {
-                return $query->orderBy('name', 'ASC')->get();
-            }), 
-        ]);
+        // $this->crud->addField([ // Select2
+        //     'label' => "Team 1",
+        //     'type' => 'select2',
+        //     'name' => 'team_1', // the db column for the foreign key
+        //     'entity' => 'team1', // the method that defines the relationship in your Model
+        //     'attribute' => 'name', // foreign key attribute that is shown to user
+        //     'model' => "App\Models\Team", // foreign key model
+        //     'options' => (function ($query) {
+        //         return $query->orderBy('name', 'ASC')->get();
+        //     }),
+        // ]);
+        // $this->crud->addField([ // Select2
+        //     'label' => "Team 2",
+        //     'type' => 'select2',
+        //     'name' => 'team_2', // the db column for the foreign key
+        //     'entity' => 'team2', // the method that defines the relationship in your Model
+        //     'attribute' => 'name', // foreign key attribute that is shown to user
+        //     'model' => "App\Models\Team", // foreign key model
+        //     'options' => (function ($query) {
+        //         return $query->orderBy('name', 'ASC')->get();
+        //     }),
+        // ]);
 
 
         $this->crud->addField([
@@ -146,12 +143,24 @@ class QuestionCrudController extends CrudController
         //     'label' => 'End Date', // the input label
         //     'type' => 'datetime_picker',
         // ]);
+
+        $this->crud->addField(
+            [
+                'name' => 'image',
+                'type' => 'image',
+                'label' => 'Image',
+                'upload' => true,
+                'crop' => true, // set to true to allow cropping, false to disable
+                'aspect_ratio' => 0
+            ]
+        );
+
         $this->crud->addColumn(
             [
                 'name' => 'start_date',
                 'label' => 'Start Date',
                 'type' => 'datetime',
-                
+
             ]
         );
         // $this->crud->addColumn(
@@ -159,7 +168,7 @@ class QuestionCrudController extends CrudController
         //         'name' => 'end_date',
         //         'label' => 'End Date',
         //         'type' => 'datetime',
-                
+
         //     ]
         // );
         $this->crud->addField([
@@ -174,13 +183,13 @@ class QuestionCrudController extends CrudController
         ]);
 
 
-        $this->crud->addFilter([// select2 filter
+        $this->crud->addFilter([ // select2 filter
             'name' => 'poll_id',
             'type' => 'select2',
             'label' => 'Poll'
-                ], function() {
+        ], function () {
             return \App\Models\Poll::all()->pluck('name', 'id')->toArray();
-        }, function($value) { // if the filter is active
+        }, function ($value) { // if the filter is active
             $this->crud->addClause('where', 'poll_id', $value);
         });
 
@@ -215,12 +224,10 @@ class QuestionCrudController extends CrudController
         }
         return parent::edit($id);
     }
-     public function getQuestion($id)
+    public function getQuestion($id)
     {
         $this->crud->setModel('App\Models\Question');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/question');
-      return \App\Models\Question::findOrFail($id);
-       
+        return \App\Models\Question::findOrFail($id);
     }
-    
 }

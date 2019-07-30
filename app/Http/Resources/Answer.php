@@ -17,9 +17,7 @@ class Answer extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'end_date' => $this->end_date,
+            'category'=>$this->team_id,
             'state' => $this->state,
             'correct'=>$this->correct,
             'created_at' => $this->created_at,
