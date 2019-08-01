@@ -23,6 +23,7 @@ class Poll extends JsonResource
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'end_date' => $this->end_date,
+            'finished'=>$this->finished,
             'state' => $this->state,
             'questions' =>  QuestionsResource::collection($this->questions),
             'created_at' => $this->created_at,
