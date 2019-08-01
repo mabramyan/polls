@@ -15,10 +15,6 @@ deploy_to_production:
     - composer require predis/predis
     - "rsync -ar --exclude-from='.rsync_excludes' --delete-before --delete-excluded . 127.0.0.1::poll.fortunejack.com"
     - php artisan migrate --force
-    - php artisan cache:clear
     - php artisan config:clear
     - php artisan config:cache
-    - php artisan view:clear
-    - php artisan passport:keys
-    - php artisan vendor:publish --tag=passport-components
 
