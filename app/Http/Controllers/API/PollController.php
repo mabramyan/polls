@@ -35,7 +35,7 @@ class PollController extends Controller
            throw new ApiException("Campaign not found", 50);
         }
 
-        $fined = Poll::where([['campaign_id', $campaign_id],['state',1]])->get();
+        $fined = Poll::where([['campaign_id', $campaign_id],['state',1]])->orderBy('start_date', 'asc')->get();
         if(empty($fined))
         {
             throw new ApiException("", 1);
