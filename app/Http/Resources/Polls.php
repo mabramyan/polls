@@ -30,3 +30,4 @@ class Polls extends JsonResource
         ];
     }
 }
+ 
