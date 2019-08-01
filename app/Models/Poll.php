@@ -40,7 +40,7 @@ class Poll extends Model
     }
     public function questions()
     {
-        return $this->hasMany('App\Models\Question')->orderBy('lft');
+        return $this->hasMany('App\Models\Question')->orderBy('lft','asc');
     }
 
     /*
