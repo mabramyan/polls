@@ -62,7 +62,7 @@ class PollController extends Controller
             au.user_id, 
             count(a.id) as total, 
             SUM(CASE WHEN a.correct=1 THEN 1 ELSE 0 END) as correct
-        FROM sports.user_answers as au 
+        FROM user_answers as au 
         inner join answers as  a on a.id=au.answer_id 
         where au.poll_id=:poll_id 
             and au.state=1 
