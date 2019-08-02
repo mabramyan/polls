@@ -144,16 +144,28 @@ class QuestionCrudController extends CrudController
         //     'type' => 'datetime_picker',
         // ]);
 
-        $this->crud->addField(
-            [
+        // $this->crud->addField(
+        //     [
+        //         'name' => 'image',
+        //         'type' => 'image',
+        //         'label' => 'Image',
+        //         'upload' => true,
+        //         'crop' => true, // set to true to allow cropping, false to disable
+        //         'aspect_ratio' => 0
+        //     ]
+        // );
+
+
+         $this->crud->addField(
+            [   // Upload
                 'name' => 'image',
-                'type' => 'image',
                 'label' => 'Image',
+                'type' => 'upload',
                 'upload' => true,
-                'crop' => true, // set to true to allow cropping, false to disable
-                'aspect_ratio' => 0
+                //'disk' => 'public_uploads' // if you store files in the /public folder, please ommit this; if you store them in /storage or S3, please specify it;
             ]
         );
+
 
         $this->crud->addColumn(
             [
