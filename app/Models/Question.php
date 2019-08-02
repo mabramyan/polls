@@ -96,7 +96,7 @@ class Question extends Model
     public function setImageAttribute($value)
     {
         $attribute_name = "image";
-        $disk = "public_uploads";
+        $disk ='public_uploads';// config('backpack.base.root_disk_name');
         $destination_path = "questions";
 
         // if the image was erased
@@ -107,22 +107,34 @@ class Question extends Model
             // set null in the database column
             $this->attributes[$attribute_name] = null;
         }
+     
+        $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+        $public_destination_path='uploads/'.$this->attributes[$attribute_name];
+        $this->attributes[$attribute_name] =$public_destination_path;
 
-        // if a base64 was sent, store it in the db
-        if (starts_with($value, 'data:image'))
-        {
-            // 0. Make the image
-            $image = \Image::make($value)->encode('jpg', 90);
-            // 1. Generate a filename.
-            $filename = md5($value.time()).'.jpg';
-            // 2. Store the image on disk.
-            \Storage::disk($disk)->put($destination_path.'/'.$filename, $image->stream());
-            // 3. Save the path to the database
+        
 
 
-            
-            $this->attributes[$attribute_name] ='uploads/'. $destination_path.'/'.$filename;
-        }
+
+
+        // // if a base64 was sent, store it in the db
+        // if (starts_with($value, 'data:image'))
+        // {
+        //     // 0. Make the image
+        //     $image = \Image::make($value)->encode('jpg', 90);
+        //     // 1. Generate a filename.
+        //     $filename = md5($value.time()).'.jpg';
+        //     // 2. Store the image on disk.
+        //     \Storage::disk($disk)->put($destination_path.'/'.$filename, $image->stream());
+        //     // 3. Save the path to the database
+
+
+        //     $public_destination_path = \Str::replaceFirst('public/', '', $destination_path);
+
+
+        //     $this->attributes[$attribute_name] = $public_destination_path . '/' . $filename;
+
+        // }
     }
     
 }
