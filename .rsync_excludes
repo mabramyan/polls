@@ -2,4 +2,5 @@
 .gitlab-ci.yml
 .env.example
 .rsync_excludes
+.git*
 public/uploads/
