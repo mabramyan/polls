@@ -3,3 +3,4 @@
 .env.example
 .rsync_excludes
 .git*
+public/uploads/
