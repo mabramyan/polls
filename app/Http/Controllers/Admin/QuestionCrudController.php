@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Backpack\CRUD\app\Http\Controllers\CrudController;
+use App\Http\Requests\QuestionRequest as StoreRequest;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
-use App\Http\Requests\QuestionRequest as StoreRequest;
 use App\Http\Requests\QuestionRequest as UpdateRequest;
+use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\CrudPanel;
 
 /**
@@ -18,11 +18,11 @@ class QuestionCrudController extends CrudController
 {
     public function setup()
     {
-        /*  
+        /*
         |--------------------------------------------------------------------------
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
-        */
+         */
         $this->crud->setModel('App\Models\Question');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/question');
         $this->crud->setEntityNameStrings('question', 'questions');
@@ -33,12 +33,10 @@ class QuestionCrudController extends CrudController
         |--------------------------------------------------------------------------
         | CrudPanel Configuration
         |--------------------------------------------------------------------------
-        */
+         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
         //$this->crud->setFromDb();
-
-
 
         $this->crud->addColumn(
             [
@@ -80,11 +78,9 @@ class QuestionCrudController extends CrudController
                 'label' => 'Published',
                 'type' => 'boolean',
                 // optionally override the Yes/No texts
-                'options' => [0 => 'Unpublished', 1 => 'Published']
+                'options' => [0 => 'Unpublished', 1 => 'Published'],
             ]
         );
-
-
 
         $this->crud->addField([
             'name' => 'name', // the name of the db column
@@ -132,7 +128,6 @@ class QuestionCrudController extends CrudController
         //     }),
         // ]);
 
-
         $this->crud->addField([
             'name' => 'start_date', // the name of the db column
             'label' => 'Start Date', // the input label
@@ -155,9 +150,8 @@ class QuestionCrudController extends CrudController
         //     ]
         // );
 
-
-         $this->crud->addField(
-            [   // Upload
+        $this->crud->addField(
+            [ // Upload
                 'name' => 'image',
                 'label' => 'Image',
                 'type' => 'upload',
@@ -165,7 +159,6 @@ class QuestionCrudController extends CrudController
                 //'disk' => 'public_uploads' // if you store files in the /public folder, please ommit this; if you store them in /storage or S3, please specify it;
             ]
         );
-
 
         $this->crud->addColumn(
             [
@@ -188,17 +181,16 @@ class QuestionCrudController extends CrudController
             'label' => 'Published', // the input label
             'type' => 'radio',
             'default' => 1,
-            'options' => [ // the key will be stored in the db, the value will be shown as label; 
+            'options' => [ // the key will be stored in the db, the value will be shown as label;
                 0 => "Unpublished",
-                1 => "Published"
+                1 => "Published",
             ],
         ]);
-
 
         $this->crud->addFilter([ // select2 filter
             'name' => 'poll_id',
             'type' => 'select2',
-            'label' => 'Poll'
+            'label' => 'Poll',
         ], function () {
             return \App\Models\Poll::all()->pluck('name', 'id')->toArray();
         }, function ($value) { // if the filter is active
@@ -208,6 +200,7 @@ class QuestionCrudController extends CrudController
         // add asterisk for fields that are required in QuestionRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
+        $this->crud->removeButton('delete');
     }
 
     public function store(StoreRequest $request)

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Backpack\CRUD\app\Http\Controllers\CrudController;
+use App\Http\Requests\AnswerRequest as StoreRequest;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
-use App\Http\Requests\AnswerRequest as StoreRequest;
 use App\Http\Requests\AnswerRequest as UpdateRequest;
+use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\CrudPanel;
 
 /**
@@ -22,7 +22,7 @@ class AnswerCrudController extends CrudController
         |--------------------------------------------------------------------------
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
-        */
+         */
         $this->crud->setModel('App\Models\Answer');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/answer');
         $this->crud->setEntityNameStrings('answer', 'answers');
@@ -32,7 +32,7 @@ class AnswerCrudController extends CrudController
         |--------------------------------------------------------------------------
         | CrudPanel Configuration
         |--------------------------------------------------------------------------
-        */
+         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
         //$this->crud->setFromDb();
@@ -56,7 +56,7 @@ class AnswerCrudController extends CrudController
         //         'label' => 'Team 2',
         //         'type' => 'text',
         //     ]
-        // ); 
+        // );
         $this->crud->addColumn(
             // [
             //     // 1-n relationship
@@ -97,15 +97,13 @@ class AnswerCrudController extends CrudController
             ]
         );
 
-
         $this->crud->addColumn(
             [
                 'name' => 'correct',
                 'label' => "Correct",
-                'type' => 'check'
+                'type' => 'check',
             ]
         );
-
 
         $this->crud->addColumn(
             [
@@ -113,17 +111,16 @@ class AnswerCrudController extends CrudController
                 'label' => 'published',
                 'type' => 'boolean',
                 // optionally override the Yes/No texts
-                'options' => [0 => 'Unpublished', 1 => 'Published']
+                'options' => [0 => 'Unpublished', 1 => 'Published'],
             ]
         );
-
-
 
         $this->crud->addField([
             'name' => 'name', // the name of the db column
             'label' => 'Name', // the input label
             'type' => 'text',
         ]);
+
         // $this->crud->addField([
         //     'name' => 'team_2', // the name of the db column
         //     'label' => 'Team 2', // the input label
@@ -143,8 +140,8 @@ class AnswerCrudController extends CrudController
             }),
             'attributes' => [
                 'class' => 'form-control changed_team',
-                
-              ], 
+
+            ],
         ]);
 
         $this->crud->addField([ // Select2
@@ -167,19 +164,19 @@ class AnswerCrudController extends CrudController
             // }),
             'attributes' => [
                 //'class' => 'form-control target_team',
-                
-              ], 
+
+            ],
         ]);
 
         $this->crud->addField(
 
             [
-                'name'        => 'correct', // the name of the db column
-                'label'       => 'Correct', // the input label
-                'type'        => 'radio',
-                'options'     => [ // the key will be stored in the db, the value will be shown as label; 
+                'name' => 'correct', // the name of the db column
+                'label' => 'Correct', // the input label
+                'type' => 'radio',
+                'options' => [ // the key will be stored in the db, the value will be shown as label;
                     0 => "No",
-                    1 => "Yes"
+                    1 => "Yes",
                 ],
                 // optional
                 //'inline'      => false, // show the radios all on the same line?
@@ -191,30 +188,34 @@ class AnswerCrudController extends CrudController
             'label' => 'Published', // the input label
             'type' => 'radio',
             'default' => 1,
-            'options' => [ // the key will be stored in the db, the value will be shown as label; 
+            'options' => [ // the key will be stored in the db, the value will be shown as label;
                 0 => "Unpublished",
-                1 => "Published"
+                1 => "Published",
             ],
         ]);
-
-
-
 
         $this->crud->addFilter([ // select2 filter
             'name' => 'question_id',
             'type' => 'select2',
-            'label' => 'Question'
+            'label' => 'Question',
         ], function () {
             return \App\Models\Question::all()->pluck('name', 'id')->toArray();
         }, function ($value) { // if the filter is active
             $this->crud->addClause('where', 'question_id', $value);
         });
 
-
-
         // add asterisk for fields that are required in AnswerRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
+
+        $this->crud->addButtonFromView('line', 'Delete', 'customdelete', 'end');
+        $this->crud->removeButton('delete');
+    }
+    public function destroy($id)
+    {
+        $this->crud->hasAccessOrFail('delete');
+
+        return $this->crud->delete($id);
     }
 
     public function store(StoreRequest $request)
@@ -247,12 +248,12 @@ class AnswerCrudController extends CrudController
         return parent::reorder();
     }
 
-
     public function getEntries()
     {
 
         return parent::getEntries();
     }
+
     public function edit($id)
     {
         $answer = \App\Models\Answer::findOrFail($id);
