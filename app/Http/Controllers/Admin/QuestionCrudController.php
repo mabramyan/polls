@@ -200,6 +200,7 @@ class QuestionCrudController extends CrudController
         // add asterisk for fields that are required in QuestionRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
+        // Remove delete button
         $this->crud->removeButton('delete');
     }
 
