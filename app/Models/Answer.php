@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
+use Illuminate\Database\Eloquent\Model;
 
 class Answer extends Model
 {
@@ -13,13 +13,13 @@ class Answer extends Model
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
     |--------------------------------------------------------------------------
-    */
+     */
 
     protected $table = 'answers';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['name','question_id','state','correct','team_id'];
+    protected $fillable = ['name', 'question_id', 'state', 'correct', 'team_id'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -27,13 +27,13 @@ class Answer extends Model
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
-    */
+     */
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
-    */
+     */
     public function question()
     {
         return $this->belongsTo('App\Models\Question');
@@ -42,19 +42,18 @@ class Answer extends Model
     {
         return $this->belongsTo('App\Models\Team');
     }
-    
 
     /*
     |--------------------------------------------------------------------------
     | SCOPES
     |--------------------------------------------------------------------------
-    */
+     */
 
     /*
     |--------------------------------------------------------------------------
     | ACCESORS
     |--------------------------------------------------------------------------
-    */
+     */
     public function getPollIdAttribute()
     {
 
@@ -62,8 +61,8 @@ class Answer extends Model
     }
 
     /*
-    |--------------------------------------------------------------------------
-    | MUTATORS
-    |--------------------------------------------------------------------------
-    */
+|--------------------------------------------------------------------------
+| MUTATORS
+|--------------------------------------------------------------------------
+ */
 }

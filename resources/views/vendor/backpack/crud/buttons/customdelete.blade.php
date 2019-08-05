@@ -10,6 +10,7 @@
         function deleteEntry(button) {
             // ask for confirmation before deleting an item
             // e.preventDefault();
+
             var button = $(button);
             var route = button.attr('data-route');
             var row = $("#crudTable a[data-route='"+route+"']").closest('tr');
@@ -17,7 +18,11 @@
             if (confirm("{{ trans('backpack::crud.delete_confirm') }}") == true) {
                 $.ajax({
                     url: route,
-                    type: 'DELETE',
+                    type: 'POST',
+                    data: {
+                    "_token": "{{ csrf_token() }}",
+                    "_method": "DELETE"
+                    },
                     success: function(result) {
                         if (result != 1) {
                             // Show an error alert
@@ -64,6 +69,8 @@
                 });
             }
         }
+
+
         }
 
         // make it so that the function above is run after each DataTable draw event
