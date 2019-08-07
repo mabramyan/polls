@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
-use App\Models\Poll as Poll;
-use App\Models\Answer;
-use App\Models\UserAnswer;
 use App\Http\Resources\Poll as PollResource;
 use App\Http\Resources\Polls as Polls;
-use App\Http\Resources\Answer as AnswerResource;
 use App\Http\Resources\UserAnswer as UserAnswerResource;
-use App\Exceptions\ApiException;
+use App\Models\Poll as Poll;
+use App\Models\UserAnswer;
+use Illuminate\Http\Request;
 
 class PollController extends Controller
 {
@@ -48,7 +46,7 @@ class PollController extends Controller
         if (!empty($poll_id)) {
             $where[] = ['poll_id', $poll_id];
         }
-        $answers =  UserAnswer::where($where)->get();
+        $answers = UserAnswer::where($where)->get();
         return response()->json(['success' => UserAnswerResource::collection($answers)]);
     }
 
@@ -58,14 +56,14 @@ class PollController extends Controller
     }
     public function getReport($poll_id)
     {
-        $results = \DB::select(\DB::raw("SELECT 
-            au.user_id, 
-            count(a.id) as total, 
+        $results = \DB::select(\DB::raw("SELECT
+            au.user_id,
+            count(a.id) as total,
             SUM(CASE WHEN a.correct=1 THEN 1 ELSE 0 END) as correct
-        FROM user_answers as au 
-        inner join answers as  a on a.id=au.answer_id 
-        where au.poll_id=:poll_id 
-            and au.state=1 
+        FROM user_answers as au
+        inner join answers as  a on a.id=au.answer_id
+        where au.poll_id=:poll_id
+            and au.state=1
         group by au.user_id"), array(
             'poll_id' => $poll_id,
         ));
