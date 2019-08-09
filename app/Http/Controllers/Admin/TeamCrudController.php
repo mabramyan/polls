@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Backpack\CRUD\app\Http\Controllers\CrudController;
+use App\Http\Requests\TeamRequest as StoreRequest;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
-use App\Http\Requests\TeamRequest as StoreRequest;
 use App\Http\Requests\TeamRequest as UpdateRequest;
+use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\CrudPanel;
 
 /**
@@ -22,19 +22,19 @@ class TeamCrudController extends CrudController
         |--------------------------------------------------------------------------
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
-        */
+         */
         $this->crud->setModel('App\Models\Team');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/team');
         $this->crud->setEntityNameStrings('team', 'teams');
-        $this->crud->setHeading('Answer Categories','index');
-        $this->crud->setHeading('Answer Categories','create');
-        $this->crud->setHeading('Answer Categories','edit');
+        $this->crud->setHeading('Answer Categories', 'index');
+        $this->crud->setHeading('Answer Categories', 'create');
+        $this->crud->setHeading('Answer Categories', 'edit');
 
         /*
         |--------------------------------------------------------------------------
         | CrudPanel Configuration
         |--------------------------------------------------------------------------
-        */
+         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
         $this->crud->addColumn(
@@ -50,13 +50,14 @@ class TeamCrudController extends CrudController
                 'label' => 'Name',
                 'type' => 'text',
             ]);
-            $this->crud->addField([
-                'name' => 'name', // the name of the db column
-                'label' => 'Name', // the input label
-                'type' => 'text',
-            ]);
+        $this->crud->addField([
+            'name' => 'name', // the name of the db column
+            'label' => 'Name', // the input label
+            'type' => 'text',
+        ]);
 
         // add asterisk for fields that are required in TeamRequest
+        // $this->crud->enableExportButtons();
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
     }

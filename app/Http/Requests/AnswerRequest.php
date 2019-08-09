@@ -26,9 +26,9 @@ class AnswerRequest extends FormRequest
     public function rules()
     {
         return [
-             'name' => 'required|min:3|max:255',
-             'question_id' => 'required',
-             'team_id' => 'required',
+            'name' => 'required|min:3',
+            'question_id' => 'required',
+            'team_id' => 'required',
         ];
     }
 

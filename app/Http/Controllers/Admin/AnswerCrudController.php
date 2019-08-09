@@ -118,7 +118,7 @@ class AnswerCrudController extends CrudController
         $this->crud->addField([
             'name' => 'name', // the name of the db column
             'label' => 'Name', // the input label
-            'type' => 'text',
+            'type' => 'textarea',
         ]);
 
         // $this->crud->addField([
@@ -208,6 +208,7 @@ class AnswerCrudController extends CrudController
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
 
+        // $this->crud->addButtonFromModelFunction('top', 'open_google', 'openGoogle', 'beginning');
         $this->crud->addButtonFromView('line', 'Delete', 'customdelete', 'end');
         $this->crud->removeButton('delete');
     }
@@ -220,8 +221,14 @@ class AnswerCrudController extends CrudController
 
     public function store(StoreRequest $request)
     {
+
+        $names = array_filter(explode("\r\n", $request->request->get('name')));
+        foreach ($names as $name) {
+            $request->request->set('name', trim($name));
+            $redirect_location = parent::storeCrud($request);
+        }
+
         // your additional operations before save here
-        $redirect_location = parent::storeCrud($request);
         // your additional operations after save here
         // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
@@ -229,11 +236,16 @@ class AnswerCrudController extends CrudController
 
     public function update(UpdateRequest $request)
     {
-        // your additional operations before save here
-        $redirect_location = parent::updateCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
+        $names = array_filter(explode("\r\n", $request->request->get('name')));
+        $name = trim($names[0]);
+        if (strlen($name) > 0) {
+            $request->request->set('name', $name);
+            $redirect_location = parent::updateCrud($request);
+
+            // your additional operations after save here
+            // use $this->data['entry'] or $this->crud->entry
+            return $redirect_location;
+        }
     }
 
     public function reorder()
