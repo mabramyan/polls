@@ -9,7 +9,6 @@ use App\Http\Requests\PollRequest as UpdateRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\CrudPanel;
 use Illuminate\Support\Carbon;
-use \App\Models\Answer;
 
 /**
  * Class PollCrudController
@@ -185,15 +184,17 @@ class PollCrudController extends CrudController
         $poll = \App\Models\Poll::findOrFail($id);
         $current = Carbon::now();
 
-        $questionsIds = \App\Models\Answer::where('question_id', $id)->where('correct', 1)->pluck('id')->toArray();
-
         if (!$poll->finished) {
-
             $poll->finished = 1;
             $poll->finished_date = $current;
             if ($poll->save()) {
                 \Alert::success(trans('Saved sccess'))->flash();
-                \App\Models\UserAnswer::whereIn('question_id', $questionsIds)->update(['correct' => 1]);
+                $questions = $poll->questions;
+                foreach ($questions as $question) {
+                    $answerIds = $question->answers()->where('correct', 1)->pluck('id')->toArray();
+                    \App\Models\UserAnswer::whereIn('answer_id', $answerIds)->update(['correct' => 1]);
+                }
+
                 return back();
             }
             \Alert::error(trans('Error: can\'t save'))->flash();
