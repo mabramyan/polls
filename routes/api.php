@@ -18,7 +18,8 @@
 Route::get('login', 'API\UserController@login');
 Route::get('teams', 'API\SharedController@getAllTeams');
 //Route::post('register', 'API\UserController@register');
-Route::group(['middleware' => 'auth:api'], function () {
+// 'middleware' => 'auth:api'
+Route::group([], function () {
     Route::get('get-report/{poll_id}', 'API\PollController@getReport');
     Route::get('get-user-answers/{campaign_id}/{user_id}/{poll_id?}', 'API\PollController@getUserAnswers');
     Route::get('polls/{campaign_id?}', 'API\PollController@getPolls');

@@ -6,7 +6,7 @@ use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Poll as PollResource;
 use App\Http\Resources\Polls as Polls;
-use App\Http\Resources\UserAnswer as UserAnswerResource;
+use App\Models\Answer;
 use App\Models\Poll as Poll;
 use App\Models\UserAnswer;
 use Illuminate\Http\Request;
@@ -47,7 +47,11 @@ class PollController extends Controller
             $where[] = ['poll_id', $poll_id];
         }
         $answers = UserAnswer::where($where)->get();
-        return response()->json(['success' => UserAnswerResource::collection($answers)]);
+        foreach ($answers as $answer) {
+            $answer['answer'] = Answer::where('id', $answer['answer_id'])->get();
+        }
+
+        return response()->json(['success' => $answers]);
     }
 
     public function getActivePoll()
