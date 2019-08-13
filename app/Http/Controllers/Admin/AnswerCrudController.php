@@ -208,7 +208,7 @@ class AnswerCrudController extends CrudController
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
 
-        // $this->crud->addButtonFromModelFunction('top', 'open_google', 'openGoogle', 'beginning');
+        $this->crud->addButtonFromView('line', 'saveNumberSeven', 'number_seven', 'beginning');
         $this->crud->addButtonFromView('line', 'Delete', 'customdelete', 'end');
         $this->crud->removeButton('delete');
     }
@@ -274,5 +274,17 @@ class AnswerCrudController extends CrudController
             return back();
         }
         return parent::edit($id);
+    }
+
+    public function saveNumberSeven($id)
+    {
+        $answer = \App\Models\Answer::findOrFail($id);
+        $answer['number_seven'] = !$answer['number_seven'];
+        if ($answer->save()) {
+            \Alert::success(trans('Number Seven Saved'))->flash();
+            return back();
+        }
+        \Alert::error(trans('Error: can\'t save'))->flash();
+        return back();
     }
 }
