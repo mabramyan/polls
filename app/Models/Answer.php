@@ -59,6 +59,10 @@ class Answer extends Model
 
         return $this->question->poll->id;
     }
+    public function getCanEditAttribute()
+    {
+        return true;
+    }
 
     /*
 |--------------------------------------------------------------------------
