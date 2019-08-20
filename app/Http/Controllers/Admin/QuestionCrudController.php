@@ -76,9 +76,9 @@ class QuestionCrudController extends CrudController
             [
                 'name' => 'state',
                 'label' => 'Published',
-                'type' => 'boolean',
+                'type' => 'select_from_array',
                 // optionally override the Yes/No texts
-                'options' => [0 => 'Unpublished', 1 => 'Published'],
+                'options' => [0 => 'Unpublished', 1 => 'Published', 2=>'Futured'],
             ]
         );
 
@@ -184,6 +184,7 @@ class QuestionCrudController extends CrudController
             'options' => [ // the key will be stored in the db, the value will be shown as label;
                 0 => "Unpublished",
                 1 => "Published",
+                2 => "Futured",
             ],
         ]);
 
