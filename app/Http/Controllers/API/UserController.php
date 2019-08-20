@@ -113,7 +113,10 @@ class UserController extends Controller
         if (empty($poll->questions)) {
             throw new ApiException('Poll has no questions', 23);
         }
-        if ($poll->questions->count() != count($answers)) {
+        if ($poll->questions->filter(function($value, $key){
+            return $value->state >0?$value:false;
+            
+                        })->count() != count($answers)) {
             throw new ApiException('Wrong number of answers', 25);
         }
 
@@ -135,7 +138,10 @@ class UserController extends Controller
             throw new ApiException('Wrong number of answers', 26);
         }
 
-        if ($countQuestions[0]->cnt != $poll->questions->count()) {
+        if ($countQuestions[0]->cnt != $poll->questions->filter(function($value, $key){
+            return $value->state >0?$value:false;
+            
+                        })->count()) {
             throw new ApiException('Wrong number of answers', 27);
         }
         $res = true;
