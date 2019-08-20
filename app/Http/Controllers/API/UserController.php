@@ -10,6 +10,7 @@ use Validator;
 use App\Exceptions\ApiException;
 use App\Models\Answer;
 use App\Models\UserAnswer;
+use App\Models\Poll;
 use App\Http\Resources\Answer as AppAnswer;
 use Illuminate\Support\Str;
 
@@ -99,22 +100,54 @@ class UserController extends Controller
         }
         throw new ApiException('Unknown error', 100);
     }
-    public function bulkVote(Request $request,$user_id,$poll_id)
+    public function bulkVote(Request $request, $user_id, $poll_id)
     {
-
-        $if = 44;
-
-
-        if(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] == 'Debug')
-        {
-            echo '<pre>'.__FILE__.' -->>| <b> Line </b>'.__LINE__.'</pre><pre>';
-            print_r( $user_id);
-            echo '<pre>'.__FILE__.' -->>| <b> Line </b>'.__LINE__.'</pre><pre>';
-            print_r( $poll_id);
-            echo '<pre>'.__FILE__.' -->>| <b> Line </b>'.__LINE__.'</pre><pre>';
-            print_r( $request->get('answer'));
-            die;
+        $poll = Poll::where('id', '=', $poll_id)->first();
+        if (empty($poll)) {
+            throw new ApiException('Poll not found', 21);
+        }
+        $answers = $request->get('answers');
+        if (empty($answers)) {
+            throw new ApiException('No answers detected', 22);
+        }
+        if (empty($poll->questions)) {
+            throw new ApiException('Poll has no questions', 23);
+        }
+        if ($poll->questions->count() != count($answers)) {
+            throw new ApiException('Wrong number of answers', 25);
         }
 
+        $countQuestions = \DB::select(\DB::raw("SELECT  count(*) as cnt from 
+        (
+        SELECT count(*) 
+         FROM answers as a 
+         inner join questions as q on q.id=a.question_id
+         inner join polls as p on p.id=q.poll_id
+         where poll_id=:poll_id
+         and a.id in (" . implode(',', $answers) . ")
+         group by q.id
+        ) as t 
+        "), array(
+            'poll_id' => $poll_id,
+        ));
+
+        if (empty($countQuestions)) {
+            throw new ApiException('Wrong number of answers', 26);
+        }
+
+        if ($countQuestions[0]->cnt != $poll->questions->count()) {
+            throw new ApiException('Wrong number of answers', 27);
+        }
+        $res = true;
+
+        foreach ($answers as $one) {
+            $t =   UserAnswer::voteUpdate($user_id, $one);
+            $res = $res &&  $t;
+        }
+        if($res)
+        {
+            return response()->json(['success' => true], $this->successStatus);
+        }
+        throw new ApiException('Unknown error', 100);
     }
 }
