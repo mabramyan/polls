@@ -99,4 +99,22 @@ class UserController extends Controller
         }
         throw new ApiException('Unknown error', 100);
     }
+    public function bulkVote(Request $request,$user_id,$poll_id)
+    {
+
+        $if = 44;
+
+
+        if(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] == 'Debug')
+        {
+            echo '<pre>'.__FILE__.' -->>| <b> Line </b>'.__LINE__.'</pre><pre>';
+            print_r( $user_id);
+            echo '<pre>'.__FILE__.' -->>| <b> Line </b>'.__LINE__.'</pre><pre>';
+            print_r( $poll_id);
+            echo '<pre>'.__FILE__.' -->>| <b> Line </b>'.__LINE__.'</pre><pre>';
+            print_r( $request->get('answer'));
+            die;
+        }
+
+    }
 }
