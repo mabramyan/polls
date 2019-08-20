@@ -10,6 +10,7 @@ use App\Models\Answer;
 use App\Models\Poll as Poll;
 use App\Models\UserAnswer;
 use Illuminate\Http\Request;
+use App\Http\Resources\UserAnswer as UserAnswerResource;
 
 class PollController extends Controller
 {
@@ -42,16 +43,21 @@ class PollController extends Controller
 
     public function getUserAnswers($campaign_id, $user_id, $poll_id = null)
     {
-        $where = [['campaign_id', $campaign_id], ['user_id', $user_id], ['state', 1]];
+        $where = [['user_answers.campaign_id', $campaign_id], ['user_answers.user_id', $user_id], ['user_answers.state', 1]];
         if (!empty($poll_id)) {
-            $where[] = ['poll_id', $poll_id];
+            $where[] = ['user_answers.poll_id', $poll_id];
         }
-        $answers = UserAnswer::where($where)->get();
-        foreach ($answers as $answer) {
-            $answer['answer'] = Answer::where('id', $answer['answer_id'])->get();
-        }
+        // $answers = UserAnswer::where($where)->get();
+        // foreach ($answers as $answer) {
+        //     $answer['answer'] = Answer::where('id', $answer['answer_id'])->get();
+        // }
+        $userAnswers = UserAnswerResource::collection(UserAnswer::where($where)
+        ->select(['user_answers.*','answers.correct'])
+        ->join('answers', 'answers.id', '=', 'user_answers.answer_id')
+        ->get());
+       
 
-        return response()->json(['success' => $answers]);
+        return response()->json(['success' => $userAnswers]);
     }
 
     public function getActivePoll()
