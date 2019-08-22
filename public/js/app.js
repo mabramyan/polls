@@ -1853,6 +1853,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1918,7 +1947,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios.get("/admin/get_total_report_summary/" + this.selected).then(function (response) {
         console.log(response.data);
 
-        if (response.data.success && response.data.success.length) {
+        if (response.data.success) {
           _this2.totalReportSummary = response.data.success;
         } else {
           _this2.totalReportSummary = false;
@@ -38120,13 +38149,13 @@ var render = function() {
                           _vm._v(" "),
                           _c("td", [
                             _c("strong", [
-                              _vm._v(_vm._s(_vm.totalReportSummary[0].users))
+                              _vm._v(_vm._s(_vm.totalReportSummary.users))
                             ])
                           ]),
                           _vm._v(" "),
                           _c("td", [
                             _c("strong", [
-                              _vm._v(_vm._s(_vm.totalReportSummary[0].winners))
+                              _vm._v(_vm._s(_vm.totalReportSummary.winners))
                             ])
                           ]),
                           _vm._v(" "),
@@ -38134,8 +38163,8 @@ var render = function() {
                             _c("strong", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.totalReportSummary[0].users -
-                                    _vm.totalReportSummary[0].winners
+                                  _vm.totalReportSummary.users -
+                                    _vm.totalReportSummary.winners
                                 )
                               )
                             ])
@@ -38144,9 +38173,23 @@ var render = function() {
                           _c("td", [
                             _c("strong", [
                               _vm._v(
-                                _vm._s(
-                                  _vm.totalReportSummary[0].correct_answers_7
-                                )
+                                _vm._s(_vm.totalReportSummary.correct_answers_7)
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("strong", [
+                              _vm._v(
+                                _vm._s(_vm.totalReportSummary.correct_answers_6)
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("strong", [
+                              _vm._v(
+                                _vm._s(_vm.totalReportSummary.correct_answers_5)
                               )
                             ])
                           ]),
@@ -38155,31 +38198,37 @@ var render = function() {
                             _c("strong", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.totalReportSummary[0].correct_answers_6
-                                )
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _c("strong", [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.totalReportSummary[0].correct_answers_5
-                                )
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _c("strong", [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.totalReportSummary[0].correct_number_seven
+                                  _vm.totalReportSummary.correct_number_seven
                                 )
                               )
                             ])
                           ])
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.totalReportSummary
+                      ? _c("tr", [
+                          _vm._m(3),
+                          _vm._v(" "),
+                          _c("td", [_vm._v("-")]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("strong", [
+                              _vm._v(_vm._s(_vm.totalReportSummary.totalUnique))
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v("-")]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v("-")]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v("-")]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v("-")]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v("-")]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v("-")])
                         ])
                       : _vm._e()
                   ],
@@ -38215,7 +38264,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("table", { staticClass: "table" }, [
-                _vm._m(3),
+                _vm._m(4),
                 _vm._v(" "),
                 _c(
                   "tbody",
@@ -38349,6 +38398,12 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("td", [_c("strong", [_vm._v("Summary")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [_c("strong", [_vm._v("Unique")])])
   },
   function() {
     var _vm = this

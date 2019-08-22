@@ -84,6 +84,6 @@
     </script>
 
     <!-- JavaScripts -->
-    <script src="{{ mix('js/app.js') }}?v=3"></script>
+    <script src="{{ mix('js/app.js') }}?v=4"></script>
 </body>
 </html>
