@@ -62,8 +62,8 @@
                 <td>{{rep.p_id}}</td>
                 <td>{{rep.name}}</td>
                 <td>{{rep.users}}</td>
-                <td>{{rep.correct}}</td>
-                <td>{{rep.users - rep.correct}}</td>
+                <td>{{rep.winners}}</td>
+                <td>{{rep.users - rep.winners}}</td>
                 <td>{{rep.correct_answers_7}}</td>
                 <td>{{rep.correct_answers_6}}</td>
                 <td>{{rep.correct_answers_5}}</td>
