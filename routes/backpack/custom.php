@@ -14,6 +14,7 @@ Route::group([
 ], function () { // custom admin routes
     Route::post('/get_campaigns', 'CampaignCrudController@getCampaings');
     Route::get('/get_user_answers/{pollId}', 'UserAnswerCrudController@getUserAnsers');
+    Route::get('/get_total_report/{campaignId}', 'UserAnswerCrudController@getTotalReport');
     Route::get('poll/{id}/finish', 'PollCrudController@finish');
     Route::get('/getquestion/{id}', 'QuestionCrudController@getQuestion');
     Route::get('answer/{id}/number_seven', 'AnswerCrudController@saveNumberSeven')->name('number_seven');

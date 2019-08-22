@@ -11,7 +11,7 @@ class UpdateUserAnswersTable extends Migration
      */
     public function up()
     {
-        DB::table('user_answers')->where(['correct' => 1])->update(['correct' => null]);
+      //  DB::table('user_answers')->where(['correct' => 1])->update(['correct' => null]);
     }
 
     /**

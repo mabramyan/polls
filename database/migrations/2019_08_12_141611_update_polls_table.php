@@ -11,7 +11,7 @@ class UpdatePollsTable extends Migration
      */
     public function up()
     {
-        DB::table('polls')->where(['finished' => 1])->update(['finished' => 0]);
+        //DB::table('polls')->where(['finished' => 1])->update(['finished' => 0]);
     }
 
     /**

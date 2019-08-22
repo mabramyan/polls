@@ -1806,6 +1806,40 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1818,6 +1852,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       selected: "",
       selectedPoll: "",
       seletedCampaign: false,
+      totalReport: false,
+      loadingTotalReport: false,
       searched: false,
       campaigns: [],
       json_fields: {
@@ -1844,26 +1880,48 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.selectedPoll = "";
       this.searched = false;
       this.groupedAnswers = [];
+      console.log(this.selected);
+
+      if (this.selected) {
+        this.getTotalReport(this.selected);
+      }
     },
-    filteredPolls: function filteredPolls($event) {
+    getTotalReport: function getTotalReport(campaignId) {
       var _this2 = this;
 
+      this.loadingTotalReport = true;
+      axios.get("/admin/get_total_report/" + this.selected).then(function (response) {
+        if (response.data.success && response.data.success.length) {
+          _this2.totalReport = response.data.success;
+        } else {
+          _this2.totalReport = false;
+        }
+      })["catch"](function (error) {
+        _this2.errored = true;
+      })["finally"](function () {
+        return _this2.loadingTotalReport = false;
+      });
+    },
+    filteredPolls: function filteredPolls($event) {
+      var _this3 = this;
+
       return this.polls.filter(function (poll) {
-        return poll.campaign_id == _this2.selected;
+        return poll.campaign_id == _this3.selected;
       });
     },
     search: function search() {
-      var _this3 = this;
+      var _this4 = this;
 
-      axios.get("/admin/get_user_answers/" + this.selected).then(function (response) {
+      this.groupedAnswers = [];
+      axios.get("/admin/get_user_answers/" + this.selectedPoll.id).then(function (response) {
         if (response.data.success && response.data.success.length) {
-          _this3.answers = response.data.success;
-          _this3.searched = true;
-          _this3.groupedAnswers = _this3.answers.reduce(function (objectsByKeyValue, obj) {
+          _this4.answers = response.data.success;
+          _this4.searched = true;
+          _this4.groupedAnswers = _this4.answers.reduce(function (objectsByKeyValue, obj) {
             return _objectSpread({}, objectsByKeyValue, _defineProperty({}, obj["user_id"], (objectsByKeyValue[obj["user_id"]] || []).concat(obj)));
           }, {});
-          var t = JSON.parse(JSON.stringify(_this3.groupedAnswers));
-          _this3.json_data = Object.keys(t).map(function (key, index) {
+          var t = JSON.parse(JSON.stringify(_this4.groupedAnswers));
+          _this4.json_data = Object.keys(t).map(function (key, index) {
             return {
               user_id: key,
               total: t[key].length,
@@ -1873,12 +1931,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             };
           });
         } else {
-          _this3.answers = false;
+          _this4.answers = false;
         }
       })["catch"](function (error) {
-        _this3.errored = true;
+        _this4.errored = true;
       })["finally"](function () {
-        return _this3.loading = false;
+        return _this4.loading = false;
       });
     },
     findSeletedCampaign: function findSeletedCampaign() {
@@ -1903,18 +1961,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   mounted: function mounted() {
-    var _this4 = this;
+    var _this5 = this;
 
     axios.post("/admin/get_campaigns").then(function (response) {
       if (response.data.success) {
-        _this4.campaigns = response.data.success.campaigns;
-        _this4.polls = response.data.success.polls;
+        _this5.campaigns = response.data.success.campaigns;
+        _this5.polls = response.data.success.polls;
       }
     })["catch"](function (error) {
       console.log(error);
-      _this4.errored = true;
+      _this5.errored = true;
     })["finally"](function () {
-      return _this4.loading = false;
+      return _this5.loading = false;
     });
   }
 });
@@ -37995,13 +38053,49 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-md-12" }, [
+        _vm.totalReport
+          ? _c("div", { staticClass: "panel panel-default" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("table", { staticClass: "table" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.totalReport, function(rep, index) {
+                    return _c("tr", { key: index }, [
+                      _c("td", [_vm._v(_vm._s(rep.p_id))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(rep.name))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(rep.users))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(rep.correct))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(rep.users - rep.correct))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(rep.correct_answers_7))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(rep.correct_answers_6))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(rep.correct_answers_5))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(rep.correct_number_seven))])
+                    ])
+                  }),
+                  0
+                )
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
         _vm.groupedAnswers && _vm.selectedPoll && _vm.searched
           ? _c("div", { staticClass: "panel panel-default" }, [
               _c(
                 "div",
                 { staticClass: "panel-heading" },
                 [
-                  _c("strong", [_vm._v("Total report")]),
+                  _c("strong", [_vm._v("Report")]),
                   _vm._v(" "),
                   _c(
                     "export-excel",
@@ -38021,7 +38115,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("table", { staticClass: "table" }, [
-                _vm._m(0),
+                _vm._m(2),
                 _vm._v(" "),
                 _c(
                   "tbody",
@@ -38116,6 +38210,40 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "panel-heading" }, [
+      _c("strong", [_vm._v("Total report")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Poll ID")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Poll Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Total users")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Winners")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Losers")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Correct 7")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Correct 6")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Correct 5")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Correct #7")])
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
