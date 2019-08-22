@@ -69,19 +69,48 @@
                 <td>{{rep.correct_answers_5}}</td>
                 <td>{{rep.correct_number_seven}}</td>
               </tr>
-<tr v-if="totalReportSummary">
-                <td><strong>Summary</strong></td>
+              <tr v-if="totalReportSummary">
+                <td>
+                  <strong>Summary</strong>
+                </td>
                 <td>-</td>
-                <td><strong>{{totalReportSummary[0].users}}</strong></td>
-                <td><strong>{{totalReportSummary[0].winners}}</strong></td>
-                <td><strong>{{totalReportSummary[0].users - totalReportSummary[0].winners}}</strong></td>
-                <td><strong>{{totalReportSummary[0].correct_answers_7}}</strong></td>
-                <td><strong>{{totalReportSummary[0].correct_answers_6}}</strong></td>
-                <td><strong>{{totalReportSummary[0].correct_answers_5}}</strong></td>
-                <td><strong>{{totalReportSummary[0].correct_number_seven}}</strong></td>
-
-</tr>
-
+                <td>
+                  <strong>{{totalReportSummary.users}}</strong>
+                </td>
+                <td>
+                  <strong>{{totalReportSummary.winners}}</strong>
+                </td>
+                <td>
+                  <strong>{{totalReportSummary.users - totalReportSummary.winners}}</strong>
+                </td>
+                <td>
+                  <strong>{{totalReportSummary.correct_answers_7}}</strong>
+                </td>
+                <td>
+                  <strong>{{totalReportSummary.correct_answers_6}}</strong>
+                </td>
+                <td>
+                  <strong>{{totalReportSummary.correct_answers_5}}</strong>
+                </td>
+                <td>
+                  <strong>{{totalReportSummary.correct_number_seven}}</strong>
+                </td>
+              </tr>
+              <tr v-if="totalReportSummary">
+                <td>
+                  <strong>Unique</strong>
+                </td>
+                <td>-</td>
+                <td>
+                  <strong>{{totalReportSummary.totalUnique}}</strong>
+                </td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -216,8 +245,8 @@ export default {
       axios
         .get("/admin/get_total_report_summary/" + this.selected)
         .then(response => {
-          console.log(response.data)
-          if (response.data.success && response.data.success.length) {
+          console.log(response.data);
+          if (response.data.success) {
             this.totalReportSummary = response.data.success;
           } else {
             this.totalReportSummary = false;
