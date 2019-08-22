@@ -69,6 +69,19 @@
                 <td>{{rep.correct_answers_5}}</td>
                 <td>{{rep.correct_number_seven}}</td>
               </tr>
+<tr v-if="totalReportSummary">
+                <td><strong>Summary</strong></td>
+                <td>-</td>
+                <td><strong>{{totalReportSummary[0].users}}</strong></td>
+                <td><strong>{{totalReportSummary[0].winners}}</strong></td>
+                <td><strong>{{totalReportSummary[0].users - totalReportSummary[0].winners}}</strong></td>
+                <td><strong>{{totalReportSummary[0].correct_answers_7}}</strong></td>
+                <td><strong>{{totalReportSummary[0].correct_answers_6}}</strong></td>
+                <td><strong>{{totalReportSummary[0].correct_answers_5}}</strong></td>
+                <td><strong>{{totalReportSummary[0].correct_number_seven}}</strong></td>
+
+</tr>
+
             </tbody>
           </table>
         </div>
@@ -147,6 +160,7 @@ export default {
       selectedPoll: "",
       seletedCampaign: false,
       totalReport: false,
+      totalReportSummary: false,
       loadingTotalReport: false,
       searched: false,
       campaigns: [],
@@ -192,6 +206,21 @@ export default {
             this.totalReport = response.data.success;
           } else {
             this.totalReport = false;
+          }
+        })
+        .catch(error => {
+          this.errored = true;
+        })
+        .finally(() => (this.loadingTotalReport = false));
+
+      axios
+        .get("/admin/get_total_report_summary/" + this.selected)
+        .then(response => {
+          console.log(response.data)
+          if (response.data.success && response.data.success.length) {
+            this.totalReportSummary = response.data.success;
+          } else {
+            this.totalReportSummary = false;
           }
         })
         .catch(error => {
