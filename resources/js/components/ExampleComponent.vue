@@ -39,9 +39,43 @@
         </div>
       </div>
       <div class="col-md-12">
-        <div v-if="groupedAnswers && selectedPoll && searched" class="panel panel-default">
+        <div v-if="totalReport" class="panel panel-default">
           <div class="panel-heading">
             <strong>Total report</strong>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Poll ID</th>
+                <th>Poll Name</th>
+                <th>Total users</th>
+                <th>Winners</th>
+                <th>Losers</th>
+                <th>Correct 7</th>
+                <th>Correct 6</th>
+                <th>Correct 5</th>
+                <th>Correct #7</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-bind:key="index" v-for="(rep,index) in totalReport">
+                <td>{{rep.p_id}}</td>
+                <td>{{rep.name}}</td>
+                <td>{{rep.users}}</td>
+                <td>{{rep.correct}}</td>
+                <td>{{rep.users - rep.correct}}</td>
+                <td>{{rep.correct_answers_7}}</td>
+                <td>{{rep.correct_answers_6}}</td>
+                <td>{{rep.correct_answers_5}}</td>
+                <td>{{rep.correct_number_seven}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div v-if="groupedAnswers && selectedPoll && searched" class="panel panel-default">
+          <div class="panel-heading">
+            <strong>Report</strong>
             <export-excel
               class="btn btn-success pull-right mb-1"
               :data="json_data"
@@ -112,6 +146,8 @@ export default {
       selected: "",
       selectedPoll: "",
       seletedCampaign: false,
+      totalReport: false,
+      loadingTotalReport: false,
       searched: false,
       campaigns: [],
       json_fields: {
@@ -142,17 +178,36 @@ export default {
       this.selectedPoll = "";
       this.searched = false;
       this.groupedAnswers = [];
-
+      console.log(this.selected);
+      if (this.selected) {
+        this.getTotalReport(this.selected);
+      }
+    },
+    getTotalReport: function(campaignId) {
+      this.loadingTotalReport = true;
+      axios
+        .get("/admin/get_total_report/" + this.selected)
+        .then(response => {
+          if (response.data.success && response.data.success.length) {
+            this.totalReport = response.data.success;
+          } else {
+            this.totalReport = false;
+          }
+        })
+        .catch(error => {
+          this.errored = true;
+        })
+        .finally(() => (this.loadingTotalReport = false));
     },
 
     filteredPolls: function($event) {
       return this.polls.filter(poll => poll.campaign_id == this.selected);
-
     },
 
     search: function() {
+      this.groupedAnswers = [];
       axios
-        .get("/admin/get_user_answers/" + this.selected)
+        .get("/admin/get_user_answers/" + this.selectedPoll.id)
         .then(response => {
           if (response.data.success && response.data.success.length) {
             this.answers = response.data.success;
@@ -168,17 +223,13 @@ export default {
             );
             let t = JSON.parse(JSON.stringify(this.groupedAnswers));
 
-            this.json_data = 
-                Object.keys(t).map(function(key, index) {
-                  
-                  return {
-                    user_id: key,
-                    total: t[key].length,
-                    correct: t[key].filter(a => a.correct == 1).length
-                  };
-                })
-              ;
-
+            this.json_data = Object.keys(t).map(function(key, index) {
+              return {
+                user_id: key,
+                total: t[key].length,
+                correct: t[key].filter(a => a.correct == 1).length
+              };
+            });
           } else {
             this.answers = false;
           }
@@ -186,8 +237,7 @@ export default {
         .catch(error => {
           this.errored = true;
         })
-        .finally(() => (this.loading = false));       
-
+        .finally(() => (this.loading = false));
     },
 
     findSeletedCampaign: function() {
@@ -197,9 +247,7 @@ export default {
     },
 
     hasPredictionInPoll(pollId) {
-
       return this.answers.reduce(function(a, b) {
-
         return pollId == b.poll_id ? a + 1 : a;
       }, 0);
     },
