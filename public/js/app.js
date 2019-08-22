@@ -1840,6 +1840,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1853,6 +1866,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       selectedPoll: "",
       seletedCampaign: false,
       totalReport: false,
+      totalReportSummary: false,
       loadingTotalReport: false,
       searched: false,
       campaigns: [],
@@ -1895,6 +1909,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this2.totalReport = response.data.success;
         } else {
           _this2.totalReport = false;
+        }
+      })["catch"](function (error) {
+        _this2.errored = true;
+      })["finally"](function () {
+        return _this2.loadingTotalReport = false;
+      });
+      axios.get("/admin/get_total_report_summary/" + this.selected).then(function (response) {
+        console.log(response.data);
+
+        if (response.data.success && response.data.success.length) {
+          _this2.totalReportSummary = response.data.success;
+        } else {
+          _this2.totalReportSummary = false;
         }
       })["catch"](function (error) {
         _this2.errored = true;
@@ -38062,28 +38089,101 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "tbody",
-                  _vm._l(_vm.totalReport, function(rep, index) {
-                    return _c("tr", { key: index }, [
-                      _c("td", [_vm._v(_vm._s(rep.p_id))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(rep.name))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(rep.users))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(rep.winners))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(rep.users - rep.winners))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(rep.correct_answers_7))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(rep.correct_answers_6))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(rep.correct_answers_5))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(rep.correct_number_seven))])
-                    ])
-                  }),
-                  0
+                  [
+                    _vm._l(_vm.totalReport, function(rep, index) {
+                      return _c("tr", { key: index }, [
+                        _c("td", [_vm._v(_vm._s(rep.p_id))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(rep.name))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(rep.users))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(rep.winners))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(rep.users - rep.winners))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(rep.correct_answers_7))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(rep.correct_answers_6))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(rep.correct_answers_5))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(rep.correct_number_seven))])
+                      ])
+                    }),
+                    _vm._v(" "),
+                    _vm.totalReportSummary
+                      ? _c("tr", [
+                          _vm._m(2),
+                          _vm._v(" "),
+                          _c("td", [_vm._v("-")]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("strong", [
+                              _vm._v(_vm._s(_vm.totalReportSummary[0].users))
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("strong", [
+                              _vm._v(_vm._s(_vm.totalReportSummary[0].winners))
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("strong", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.totalReportSummary[0].users -
+                                    _vm.totalReportSummary[0].winners
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("strong", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.totalReportSummary[0].correct_answers_7
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("strong", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.totalReportSummary[0].correct_answers_6
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("strong", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.totalReportSummary[0].correct_answers_5
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("strong", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.totalReportSummary[0].correct_number_seven
+                                )
+                              )
+                            ])
+                          ])
+                        ])
+                      : _vm._e()
+                  ],
+                  2
                 )
               ])
             ])
@@ -38115,7 +38215,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("table", { staticClass: "table" }, [
-                _vm._m(2),
+                _vm._m(3),
                 _vm._v(" "),
                 _c(
                   "tbody",
@@ -38243,6 +38343,12 @@ var staticRenderFns = [
         _c("th", [_vm._v("Correct #7")])
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [_c("strong", [_vm._v("Summary")])])
   },
   function() {
     var _vm = this
