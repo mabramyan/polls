@@ -254,7 +254,7 @@ class UserAnswerCrudController extends CrudController
         p.id as p_id,p.name,
                                 ag.* ,
                                 count(ag.user_id) as users,
-                                SUM(CASE WHEN ag.correct_answers>5 THEN 1 ELSE 0 END) AS winners,
+                                SUM(CASE WHEN ag.correct_answers>4 THEN 1 ELSE 0 END) AS winners,
                                 SUM(CASE WHEN ag.correct_number_seven>0 THEN 1 ELSE 0 END) AS correct_number_seven,
                                 SUM(CASE WHEN ag.correct_answers=7 THEN 1 ELSE 0 END) AS correct_answers_7,
                                 SUM(CASE WHEN ag.correct_answers=6 THEN 1 ELSE 0 END) AS correct_answers_6,
