@@ -24,6 +24,8 @@ class Polls extends JsonResource
             'end_date' => $this->end_date,
             'state' => $this->state,
             'finished'=>$this->finished,
+            'finished_date'=>$this->finished_date,
+
             //'questions' =>  QuestionsResource::collection($this->questions),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
