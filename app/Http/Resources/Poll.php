@@ -24,6 +24,7 @@ class Poll extends JsonResource
             'end_date' => $this->end_date,
             'end_date' => $this->end_date,
             'finished'=>$this->finished,
+            'finished_date'=>$this->finished_date,
             'state' => $this->state,
             'questions' =>  QuestionsResource::collection($this->questions->filter(function($value, $key){
 return $value->state >0?$value:false;
