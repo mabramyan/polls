@@ -132,6 +132,7 @@
                 <th>User ID</th>
                 <th>Total</th>
                 <th>Correct</th>
+                <th>Number seven</th>
               </tr>
             </thead>
             <tbody>
@@ -139,6 +140,7 @@
                 <td>{{index}}</td>
                 <td>{{gAnswer.length}}</td>
                 <td>{{gAnswer.filter(qA=>qA.correct==1).length}}</td>
+                <td>{{gAnswer.filter(qA=>(qA.correct==1 && qA.number_seven==1)).length}}</td>
               </tr>
             </tbody>
           </table>
@@ -196,13 +198,15 @@ export default {
       json_fields: {
         User: "user_id",
         Total: "total",
-        Correct: "correct"
+        Correct: "correct",
+        NumberSeven: "number_seven"
       },
       json_data: [
         {
           user_id: "Tony Peña",
           total: "New York",
-          correct: "United States"
+          correct: "United States",
+          number_seven: "Number seven"
         }
       ],
       json_meta: [
@@ -279,13 +283,15 @@ export default {
               }),
               {}
             );
+            console.log( this.groupedAnswers)
             let t = JSON.parse(JSON.stringify(this.groupedAnswers));
 
             this.json_data = Object.keys(t).map(function(key, index) {
               return {
                 user_id: key,
                 total: t[key].length,
-                correct: t[key].filter(a => a.correct == 1).length
+                correct: t[key].filter(a => a.correct == 1).length,
+                number_seven: t[key].filter(a => (a.correct == 1 && a.number_seven==1)).length
               };
             });
           } else {

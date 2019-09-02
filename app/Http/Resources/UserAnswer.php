@@ -24,6 +24,7 @@ class UserAnswer extends JsonResource
             'answer_id' => $this->answer_id,
             'created_at' => $this->created_at,
             'answer' => [$this->answer],
+            'number_seven' => $this->number_seven,
             
         ];
     }
