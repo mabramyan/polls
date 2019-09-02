@@ -1882,6 +1882,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1902,12 +1904,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       json_fields: {
         User: "user_id",
         Total: "total",
-        Correct: "correct"
+        Correct: "correct",
+        NumberSeven: "number_seven"
       },
       json_data: [{
         user_id: "Tony Peña",
         total: "New York",
-        correct: "United States"
+        correct: "United States",
+        number_seven: "Number seven"
       }],
       json_meta: [[{
         key: "charset",
@@ -1976,6 +1980,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this4.groupedAnswers = _this4.answers.reduce(function (objectsByKeyValue, obj) {
             return _objectSpread({}, objectsByKeyValue, _defineProperty({}, obj["user_id"], (objectsByKeyValue[obj["user_id"]] || []).concat(obj)));
           }, {});
+          console.log(_this4.groupedAnswers);
           var t = JSON.parse(JSON.stringify(_this4.groupedAnswers));
           _this4.json_data = Object.keys(t).map(function (key, index) {
             return {
@@ -1983,6 +1988,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               total: t[key].length,
               correct: t[key].filter(function (a) {
                 return a.correct == 1;
+              }).length,
+              number_seven: t[key].filter(function (a) {
+                return a.correct == 1 && a.number_seven == 1;
               }).length
             };
           });
@@ -38282,6 +38290,16 @@ var render = function() {
                             }).length
                           )
                         )
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(
+                          _vm._s(
+                            gAnswer.filter(function(qA) {
+                              return qA.correct == 1 && qA.number_seven == 1
+                            }).length
+                          )
+                        )
                       ])
                     ])
                   }),
@@ -38415,7 +38433,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Total")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Correct")])
+        _c("th", [_vm._v("Correct")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Number seven")])
       ])
     ])
   }
