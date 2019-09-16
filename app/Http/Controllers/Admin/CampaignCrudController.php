@@ -78,4 +78,95 @@ class CampaignCrudController extends CrudController
 
 
     }
+    public function getReport()
+    {
+        die(env('DB_HOST', '127.0.0.1'));
+
+        $res = \DB::statement( "
+        SET @col = NULL;
+        SET @sql = NULL;
+        
+        SELECT GROUP_CONCAT(DISTINCT
+            CONCAT(
+              'max(case when s1.poll_id=' , id , ' then s1.poll_id else null end) round_' ,id
+              ,',sum(case when s1.poll_id=' ,id ,' then s1.correct else null end) correct_answers_',id
+              ,',max(case when s1.poll_id=' ,id ,' then s1.created_at else null end) min_prediction_date_',id
+            )
+          ) INTO @col
+        FROM sports.polls
+        where finished=1;
+        
+        set @sql = concat('
+        
+        with users_answers as(
+            SELECT a.user_id ,a.poll_id ,a.question_id
+                -- ,first_value(a.question_id) over(partition by a.user_id ,a.poll_id order by a.state desc) question_id
+                -- ,first_value(a.created_at) over(partition by a.user_id ,a.poll_id order by a.created_at asc) created_at
+                ,max(case when a.state=1 then a.answer_id else null end) answer_id
+                ,min(a.created_at) over(partition by a.user_id ,a.poll_id) created_at
+            FROM sports.user_answers a
+            where a.campaign_id =1
+            group by a.user_id ,a.poll_id ,a.question_id
+        )
+        , s1 as(
+            select users_answers.user_id ,users_answers.poll_id ,users_answers.created_at
+                ,sum(correct) correct
+            from users_answers
+            left join sports.answers ans on ans.id=users_answers.answer_id
+            group by users_answers.user_id ,users_answers.poll_id ,users_answers.created_at
+        )
+        select s1.user_id
+            ,' , @col ,'
+        from s1
+        group by s1.user_id');
+        
+        prepare stmt from @sql;
+        execute stmt;
+        deallocate prepare stmt;
+        
+        " );
+die($res);
+
+        $res = \DB::select("
+        SET @col = NULL;
+        SET @sql = NULL;
+        
+        SELECT GROUP_CONCAT(DISTINCT
+            CONCAT(
+              'max(case when s1.poll_id=' , id , ' then s1.poll_id else null end) round_' ,id
+              ,',sum(case when s1.poll_id=' ,id ,' then s1.correct else null end) correct_answers_',id
+              ,',max(case when s1.poll_id=' ,id ,' then s1.created_at else null end) min_prediction_date_',id
+            )
+          ) INTO @col
+        FROM polls
+        where finished=1;
+        
+        set @sql = concat('
+        
+        with users_answers as(
+            SELECT a.user_id ,a.poll_id ,a.question_id
+                -- ,first_value(a.question_id) over(partition by a.user_id ,a.poll_id order by a.state desc) question_id
+                -- ,first_value(a.created_at) over(partition by a.user_id ,a.poll_id order by a.created_at asc) created_at
+                ,max(case when a.state=1 then a.answer_id else null end) answer_id
+                ,min(a.created_at) over(partition by a.user_id ,a.poll_id) created_at
+            FROM user_answers a
+            where a.campaign_id =1
+            group by a.user_id ,a.poll_id ,a.question_id
+        )
+        , s1 as(
+            select users_answers.user_id ,users_answers.poll_id ,users_answers.created_at
+                ,sum(correct) correct
+            from users_answers
+            left join answers ans on ans.id=users_answers.answer_id
+            group by users_answers.user_id ,users_answers.poll_id ,users_answers.created_at
+        )
+        select s1.user_id
+            ,' , @col ,'
+        from s1
+        group by s1.user_id');
+        
+        prepare stmt from @sql;
+        execute stmt;
+        deallocate prepare stmt;");
+    }
 }
