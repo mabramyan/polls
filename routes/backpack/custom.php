@@ -12,6 +12,7 @@ Route::group([
     'namespace' => 'App\Http\Controllers\Admin',
     'except' => ['getquestion/'],
 ], function () { // custom admin routes
+    Route::get('/report', 'CampaignCrudController@getReport');
     Route::post('/get_campaigns', 'CampaignCrudController@getCampaings');
     Route::get('/get_user_answers/{pollId}', 'UserAnswerCrudController@getUserAnsers');
     Route::get('/get_total_report/{campaignId}', 'UserAnswerCrudController@getTotalReport');
