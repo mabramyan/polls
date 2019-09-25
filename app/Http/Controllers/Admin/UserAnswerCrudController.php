@@ -58,6 +58,9 @@ class UserAnswerCrudController extends CrudController
                 'name' => 'id',
                 'label' => 'ID',
                 'type' => 'text',
+                'searchLogic' => function ($query, $column, $searchTerm) {
+                    $query->orWhere(\DB::raw('user_answers.id'), 'like', '%'.$searchTerm.'%');
+                }
             ]
         );
         $this->crud->addColumn(
@@ -65,6 +68,9 @@ class UserAnswerCrudController extends CrudController
                 'name' => 'user_id',
                 'label' => 'User ID',
                 'type' => 'text',
+                'searchLogic' => function ($query, $column, $searchTerm) {
+                    $query->orWhere(\DB::raw('user_answers.user_id'), 'like', '%'.$searchTerm.'%');
+                }
             ]
         );
         $this->crud->addColumn(
@@ -87,6 +93,11 @@ class UserAnswerCrudController extends CrudController
                 'entity' => 'poll', // the method that defines the relationship in your Model
                 'attribute' => "name", // foreign key attribute that is shown to user
                 'model' => "App\Models\Poll", // foreign key model
+                'searchLogic' => function ($query, $column, $searchTerm) {
+                    $query->orWhereHas('poll', function ($q) use ($column, $searchTerm) {
+                        $q->where('name', 'like', '%'.$searchTerm.'%');
+                    });
+                }
             ]
         );
 
@@ -99,6 +110,11 @@ class UserAnswerCrudController extends CrudController
                 'entity' => 'question', // the method that defines the relationship in your Model
                 'attribute' => "name", // foreign key attribute that is shown to user
                 'model' => "App\Models\Question", // foreign key model
+                'searchLogic' => function ($query, $column, $searchTerm) {
+                    $query->orWhereHas('question', function ($q) use ($column, $searchTerm) {
+                        $q->where('name', 'like', '%'.$searchTerm.'%');
+                    });
+                }
             ]
         );
         $this->crud->addColumn(
@@ -110,6 +126,11 @@ class UserAnswerCrudController extends CrudController
                 'entity' => 'answer', // the method that defines the relationship in your Model
                 'attribute' => "name", // foreign key attribute that is shown to user
                 'model' => "App\Models\Answer", // foreign key model
+                'searchLogic' => function ($query, $column, $searchTerm) {
+                    $query->orWhereHas('answer', function ($q) use ($column, $searchTerm) {
+                        $q->where('name', 'like', '%'.$searchTerm.'%');
+                    });
+                }
             ]
         );
 
@@ -152,7 +173,7 @@ class UserAnswerCrudController extends CrudController
             'type' => 'select2',
             'label' => 'Poll'
         ], function () {
-            return \App\Models\Campaign::all()->pluck('name', 'id')->toArray();
+            return \App\Models\Poll::all()->pluck('name', 'id')->toArray();
         }, function ($value) { // if the filter is active
             $this->crud->addClause('where', 'user_answers.poll_id', $value);
         });
