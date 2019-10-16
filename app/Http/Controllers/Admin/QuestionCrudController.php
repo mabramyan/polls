@@ -133,11 +133,11 @@ class QuestionCrudController extends CrudController
             'label' => 'Start Date', // the input label
             'type' => 'datetime_picker',
         ]);
-        // $this->crud->addField([
-        //     'name' => 'end_date', // the name of the db column
-        //     'label' => 'End Date', // the input label
-        //     'type' => 'datetime_picker',
-        // ]);
+         $this->crud->addField([
+             'name' => 'end_date', // the name of the db column
+             'label' => 'End Date', // the input label
+             'type' => 'datetime_picker',
+         ]);
 
         // $this->crud->addField(
         //     [
@@ -168,14 +168,14 @@ class QuestionCrudController extends CrudController
 
             ]
         );
-        // $this->crud->addColumn(
-        //     [
-        //         'name' => 'end_date',
-        //         'label' => 'End Date',
-        //         'type' => 'datetime',
+         $this->crud->addColumn(
+             [
+                 'name' => 'end_date',
+                 'label' => 'End Date',
+                 'type' => 'datetime',
 
-        //     ]
-        // );
+             ]
+         );
         $this->crud->addField([
             'name' => 'state', // the name of the db column
             'label' => 'Published', // the input label
