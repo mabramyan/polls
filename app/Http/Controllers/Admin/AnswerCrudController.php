@@ -6,6 +6,7 @@ use App\Http\Requests\AnswerRequest as StoreRequest;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
 use App\Http\Requests\AnswerRequest as UpdateRequest;
+use App\Models\Answer;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\CrudPanel;
 
@@ -28,6 +29,8 @@ class AnswerCrudController extends CrudController
         $this->crud->setEntityNameStrings('answer', 'answers');
         $this->crud->allowAccess('reorder');
         $this->crud->enableReorder('name', 1);
+
+
         /*
         |--------------------------------------------------------------------------
         | CrudPanel Configuration
@@ -218,6 +221,7 @@ class AnswerCrudController extends CrudController
 
         return $this->crud->delete($id);
     }
+   
 
     public function store(StoreRequest $request)
     {
@@ -227,6 +231,9 @@ class AnswerCrudController extends CrudController
             $request->request->set('name', trim($name));
             $redirect_location = parent::storeCrud($request);
         }
+
+      
+
 
         // your additional operations before save here
         // your additional operations after save here
@@ -238,6 +245,19 @@ class AnswerCrudController extends CrudController
     {
         $names = array_filter(explode("\r\n", $request->request->get('name')));
         $name = trim($names[0]);
+        $id = $request->request->get('id');
+        $answer = Answer::findOrFail($id);
+        $request->request->get('correct');
+
+        $correct = $request->request->get('correct');
+        if(!empty($correct) && empty($answer->fix_date))
+        {
+           
+            $answer->fix_date = date("Y-m-d H:i:s", time());
+            $answer->save();
+        }
+        
+
         if (strlen($name) > 0) {
             $request->request->set('name', $name);
             $redirect_location = parent::updateCrud($request);
@@ -246,6 +266,9 @@ class AnswerCrudController extends CrudController
             // use $this->data['entry'] or $this->crud->entry
             return $redirect_location;
         }
+       
+
+
     }
 
     public function reorder()

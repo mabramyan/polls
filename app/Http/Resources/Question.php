@@ -22,6 +22,7 @@ class Question extends JsonResource
             'image' => !empty($this->image) ? url('/') . '/' . $this->image : null,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
+            'fix_date' => $this->fix_date,
             'state' => $this->state,
             'answers' =>    AnswersResource::collection($this->answers->filter(function($value, $key){
                 return $value->state ==1?$value:false;
