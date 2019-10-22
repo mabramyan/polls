@@ -52,10 +52,10 @@ class PollController extends Controller
         //     $answer['answer'] = Answer::where('id', $answer['answer_id'])->get();
         // }
         $userAnswers = UserAnswerResource::collection(UserAnswer::where($where)
-        ->select(['user_answers.*','answers.correct'])
-        ->join('answers', 'answers.id', '=', 'user_answers.answer_id')
-        ->get());
-       
+            ->select(['user_answers.*', 'answers.correct'])
+            ->join('answers', 'answers.id', '=', 'user_answers.answer_id')
+            ->get());
+
 
         return response()->json(['success' => $userAnswers]);
     }
@@ -79,5 +79,21 @@ class PollController extends Controller
         ));
 
         return response()->json(['success' => $results]);
+    }
+    public function getPollAnswers($poll_id)
+    {
+        $poll  = Poll::findOrFail($poll_id);
+        if (empty($poll->id)) {
+            return response()->json(['error' => 'No poll selected']);
+        }
+        $where = [['user_answers.poll_id', $poll_id], ['user_answers.state', 1]];
+        if (!empty($poll_id)) {
+            $where[] = ['user_answers.poll_id', $poll_id];
+        }
+        $usersAnswers = UserAnswerResource::collection(UserAnswer::where($where)
+            ->select(['user_answers.*', 'answers.correct'])
+            ->join('answers', 'answers.id', '=', 'user_answers.answer_id')
+            ->get());
+        return response()->json(['success' => $usersAnswers]);
     }
 }
