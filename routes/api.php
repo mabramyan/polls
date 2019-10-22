@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('poll/{id?}', 'API\PollController@getPoll');
     Route::get('vote/{user_id}/{answer_id}', 'API\UserController@vote');
     Route::get('voteupdate/{user_id}/{answer_id}', 'API\UserController@voteUpdate');
+    Route::get('poll-users-answers/{poll_id}','API\PollController@getPollAnswers');
     Route::post('bulk-vote/{user_id}/{poll_id}', 'API\UserController@bulkVote');
     
 // Route::get('poll', 'API\PollController@getPoll');
