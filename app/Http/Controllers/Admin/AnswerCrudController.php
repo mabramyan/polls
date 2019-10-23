@@ -250,11 +250,10 @@ class AnswerCrudController extends CrudController
         $request->request->get('correct');
 
         $correct = $request->request->get('correct');
-        if(!empty($correct) && empty($answer->fix_date))
+        if(!empty($correct) && empty($answer->question->fix_date))
         {
-           
-            $answer->fix_date = date("Y-m-d H:i:s", time());
-            $answer->save();
+            $answer->question->fix_date = date("Y-m-d H:i:s", time());
+            $answer->question->save();
         }
         
 
