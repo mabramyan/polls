@@ -69,8 +69,9 @@ class CampaignCrudController extends CrudController
 
 
         return response()->json([
-            'success' => ['campaigns'=>CampaignResource::collection(Campaign::all()),
-            'polls'=>PollResource::collection(Poll::all())
+            'success' => [
+                'campaigns' => Campaign::all(),
+                'polls'     => Poll::all()
             ]
         ], 200);
 
@@ -85,7 +86,7 @@ class CampaignCrudController extends CrudController
         $res = \DB::statement( "
         SET @col = NULL;
         SET @sql = NULL;
-        
+
         SELECT GROUP_CONCAT(DISTINCT
             CONCAT(
               'max(case when s1.poll_id=' , id , ' then s1.poll_id else null end) round_' ,id
@@ -95,9 +96,9 @@ class CampaignCrudController extends CrudController
           ) INTO @col
         FROM sports.polls
         where finished=1;
-        
+
         set @sql = concat('
-        
+
         with users_answers as(
             SELECT a.user_id ,a.poll_id ,a.question_id
                 -- ,first_value(a.question_id) over(partition by a.user_id ,a.poll_id order by a.state desc) question_id
@@ -119,18 +120,18 @@ class CampaignCrudController extends CrudController
             ,' , @col ,'
         from s1
         group by s1.user_id');
-        
+
         prepare stmt from @sql;
         execute stmt;
         deallocate prepare stmt;
-        
+
         " );
 die($res);
 
         $res = \DB::select("
         SET @col = NULL;
         SET @sql = NULL;
-        
+
         SELECT GROUP_CONCAT(DISTINCT
             CONCAT(
               'max(case when s1.poll_id=' , id , ' then s1.poll_id else null end) round_' ,id
@@ -140,9 +141,9 @@ die($res);
           ) INTO @col
         FROM polls
         where finished=1;
-        
+
         set @sql = concat('
-        
+
         with users_answers as(
             SELECT a.user_id ,a.poll_id ,a.question_id
                 -- ,first_value(a.question_id) over(partition by a.user_id ,a.poll_id order by a.state desc) question_id
@@ -164,7 +165,7 @@ die($res);
             ,' , @col ,'
         from s1
         group by s1.user_id');
-        
+
         prepare stmt from @sql;
         execute stmt;
         deallocate prepare stmt;");
