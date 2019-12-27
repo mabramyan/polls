@@ -21,7 +21,7 @@ class UserAnswerCrudController extends CrudController
 {
     public function setup()
     {
-        /* 
+        /*
         |--------------------------------------------------------------------------
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
@@ -259,10 +259,10 @@ class UserAnswerCrudController extends CrudController
     {
 
 
-        return response()->json(['success' => UserAnswerResource::collection(UserAnswer::where([['poll_id', $pollId], ['user_answers.state', 1]])
+        return response()->json(['success' => UserAnswer::where([['poll_id', $pollId], ['user_answers.state', 1]])
             ->select(['user_answers.*', 'answers.correct', 'answers.number_seven'])
             ->join('answers', 'answers.id', '=', 'user_answers.answer_id')
-            ->get())], 200);
+            ->get()], 200);
     }
     public function getTotalReport($campaignId)
     {
@@ -271,7 +271,7 @@ class UserAnswerCrudController extends CrudController
         }
 
 
-        $res = \DB::select(\DB::raw("SELECT 
+        $res = \DB::select(\DB::raw("SELECT
         p.id as p_id,p.name,
                                 ag.* ,
                                 count(ag.user_id) as users,
@@ -288,7 +288,7 @@ class UserAnswerCrudController extends CrudController
                             left join  answers_by_poll_users as ag on ag.poll_id=p.id
                                 where ag.campaign_id=:campaign_id
                             group by p.id
-                            ; 
+                            ;
         "), array(
             'campaign_id' => $campaignId,
         ));
@@ -299,12 +299,12 @@ class UserAnswerCrudController extends CrudController
         if (empty($campaignId)) {
             return response()->json(['success' => false], 200);
         }
- 
-        $totalUnique =   \DB::select(\DB::raw('select count(*) as cnt from (select count(*) from answers_by_poll_users where campaign_id='.$campaignId.' group by answers_by_poll_users.user_id) as t ;'));
-           
-        
 
-        $res = \DB::select(\DB::raw("SELECT 
+        $totalUnique =   \DB::select(\DB::raw('select count(*) as cnt from (select count(*) from answers_by_poll_users where campaign_id='.$campaignId.' group by answers_by_poll_users.user_id) as t ;'));
+
+
+
+        $res = \DB::select(\DB::raw("SELECT
         p.id as p_id,p.name,
                                 ag.* ,
                                 count(ag.user_id) as users,
@@ -321,7 +321,7 @@ class UserAnswerCrudController extends CrudController
                             left join  answers_by_poll_users as ag on ag.poll_id=p.id
                                 where ag.campaign_id=:campaign_id
                             group by ag.campaign_id
-                            ; 
+                            ;
         "), array(
             'campaign_id' => $campaignId,
         ));
@@ -330,7 +330,7 @@ class UserAnswerCrudController extends CrudController
             {
                 $res[0]->totalUnique = $totalUnique[0]->cnt;
             }
-            
+
             return response()->json(['success' => $res[0]], 200);
         }
         return response()->json(['success' => false], 200);
