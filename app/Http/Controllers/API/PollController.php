@@ -27,6 +27,19 @@ class PollController extends Controller
         }
         return response()->json(['success' => new PollResource($fined)]);
     }
+    public function getPollWithAnswers(Request $request, $id = null)
+    {
+        if (empty($id)) {
+            return new PollResource($this->getActivePoll());
+        }
+
+        
+        $fined = Poll::where('id', $id)->first();
+        if (empty($fined)) {
+            throw new ApiException("", 1);
+        }
+        return response()->json(['success' => new PollResource($fined)]);
+    }
     public function getPolls($campaign_id)
     {
         if (empty($campaign_id)) {

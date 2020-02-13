@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Answer as AnswersResource;
+use App\Http\Resources\UserAnswer as UserAnswerResource;
 
 class Question extends JsonResource
 {
@@ -15,6 +16,7 @@ class Question extends JsonResource
      */
     public function toArray($request)
     {
+      
 
         return [
             'id' => $this->id,
@@ -24,12 +26,16 @@ class Question extends JsonResource
             'end_date' => $this->end_date,
             'fix_date' => $this->fix_date,
             'state' => $this->state,
-            'answers' =>    AnswersResource::collection($this->answers->filter(function($value, $key){
-                return $value->state ==1?$value:false;
-                
-                            })),
+            'answers' =>    AnswersResource::collection($this->answers->filter(function ($value, $key) {
+                return $value->state == 1 ? $value : false;
+            })),
+            'user_answer' => (isset($request->user_id) && !empty($request->user_id) && $this->user_answers->filter(function ($value, $key) use ($request){
+                return ($value->state == 1 && $value->user_id == $request->user_id) ? $value : false;
+            })->first()) ?  $this->user_answers->filter(function ($value, $key) use ($request){
+                return ($value->state == 1 && $value->user_id == $request->user_id) ? $value : false;
+            })->first()->answer_id : null,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
     }
-}
+} 

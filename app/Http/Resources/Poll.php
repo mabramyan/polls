@@ -16,6 +16,9 @@ class Poll extends JsonResource
     public function toArray($request)
     {
         //dd($this->questions);
+
+   
+       
         return [
             'id' => $this->id,
             'name' => $this->name,

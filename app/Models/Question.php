@@ -67,6 +67,10 @@ class Question extends Model
         return $this->belongsTo('App\Models\Poll','team_2');
     }
 
+    public function user_answers()
+    {
+        return $this->hasMany('App\Models\UserAnswer');
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

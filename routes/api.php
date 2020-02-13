@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('get-user-answers/{campaign_id}/{user_id}/{poll_id?}', 'API\PollController@getUserAnswers');
     Route::get('polls/{campaign_id?}', 'API\PollController@getPolls');
     Route::get('poll/{id?}', 'API\PollController@getPoll');
+    Route::get('poll-with-answers/{id?}/{user_id}', 'API\PollController@getPollWithAnswers');
     Route::get('vote/{user_id}/{answer_id}', 'API\UserController@vote');
     Route::get('voteupdate/{user_id}/{answer_id}', 'API\UserController@voteUpdate');
     Route::get('poll-users-answers/{poll_id}','API\PollController@getPollAnswers');
